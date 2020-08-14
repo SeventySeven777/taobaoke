@@ -6,15 +6,15 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * methodUrl配置类
+ * method配置
  * 方便找统一放一起
  * @author SeventySeven
  * @since 2020-08-14
  */
-@ApiModel(value = "methodUrl配置类")
-@Data
-@EqualsAndHashCode(callSuper = false)
+@ApiModel(value = "method配置")
 @Accessors(chain = true)
-public class MethodUrlConfig {
+public interface MethodConfig {
+	String FIELD_MISSING = "参数为空或不全,请检查参数";
+
 
 }
