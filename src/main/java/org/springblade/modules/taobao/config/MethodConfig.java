@@ -27,6 +27,7 @@ public interface MethodConfig {
 	String NO_QUERY_USER = "未查询到该用户,检查ID";
 	String PASSWORD_ERROR = "密码错误";
 	String SAVE_OK = "保存成功";
+	String DELETE_OK = "删除成功";
 
 
 }

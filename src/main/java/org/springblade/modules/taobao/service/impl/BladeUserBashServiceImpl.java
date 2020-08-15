@@ -8,13 +8,18 @@ import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.CheckUserResultVO;
 import org.springblade.modules.taobao.dto.CheckUserVO;
+import org.springblade.modules.taobao.entity.BladeStoreUserMiddle;
 import org.springblade.modules.taobao.entity.BladeUserBash;
-import org.springblade.modules.taobao.mapper.BladeUserBashMapper;
+import org.springblade.modules.taobao.entity.BladeWalletHistory;
+import org.springblade.modules.taobao.mapper.*;
 import org.springblade.modules.taobao.service.IBladeUserBashService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springblade.modules.taobao.config.BashNumberInterface.NUMBER_ONE;
+import static org.springblade.modules.taobao.config.MethodConfig.DELETE_OK;
 
 /**
  * <p>
@@ -27,7 +32,12 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, BladeUserBash> implements IBladeUserBashService {
-	private BladeUserBashMapper bladeUserBashMapper;
+	private final BladeUserBashMapper bladeUserBashMapper;
+	private final BladeUserMapper bladeUserMapper;
+	private final BladeWalletMapper bladeWalletMapper;
+	private final BladeWalletHistoryMapper bladeWalletHistoryMapper;
+	private final BladeStoreUserMiddleMapper bladeStoreUserMiddleMapper;
+	private final BladeRateMapper bladeRateMapper;
 
 	/**
 	 * 返回分页后的用户基础信息
@@ -70,5 +80,22 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 		bladeUserBashPage.getRecords().forEach(item -> result.add(item.getId()));
 		result.add(String.valueOf(bladeUserBashPage.getTotal()));
 		return result;
+	}
+
+	/**
+	 * 全部删完 店铺中间改为1
+	 *
+	 * @param userId userID
+	 * @return 成功
+	 */
+	@Override
+	public R<String> deleteUser(String userId) {
+		bladeUserBashMapper.deleteById(userId);
+		bladeRateMapper.deleteById(userId);
+		bladeStoreUserMiddleMapper.updateByDelete(NUMBER_ONE,userId);
+		bladeWalletHistoryMapper.delete(Wrappers.<BladeWalletHistory>query().lambda().eq(BladeWalletHistory::getUserId, userId));
+		bladeWalletMapper.deleteById(userId);
+		bladeUserMapper.deleteById(userId);
+		return R.success(DELETE_OK);
 	}
 }

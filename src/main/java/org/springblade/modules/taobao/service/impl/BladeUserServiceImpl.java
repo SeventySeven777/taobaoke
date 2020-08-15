@@ -192,6 +192,22 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		return bladeUserMapper.updateById(bladeUser.setStatus(status)) != 1;
 	}
 
+	@Override
+	public List<String> getAllUserIds(Integer size, Integer current) {
+		Page<BladeUser> bladeUserPage = bladeUserMapper.selectPage(new Page<BladeUser>().setSize(size).setCurrent(current),
+			Wrappers.<BladeUser>query().lambda().isNotNull(BladeUser::getId));
+		List<String> result = new ArrayList<>();
+		bladeUserPage.getRecords().forEach(item -> result.add(item.getId()));
+		result.add(String.valueOf(bladeUserPage.getTotal()));
+		return result;
+	}
+
+	@Override
+	public R<Page<BladeUser>> getManagerPage(Integer size, Integer current) {
+		return R.data(bladeUserMapper.selectPage(new Page<BladeUser>().setCurrent(current).setSize(size),
+			Wrappers.<BladeUser>query().lambda().eq(BladeUser::getRole, MANAGER_NUMBER).eq(BladeUser::getStatus, STATUS_OK_CHECK_NUMBER)));
+	}
+
 	/**
 	 * initUser
 	 *

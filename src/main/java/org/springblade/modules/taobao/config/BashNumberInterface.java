@@ -19,6 +19,8 @@ public interface BashNumberInterface {
 	String STATUS_OK_CHECK_NO_RATE = "审核通过未设置分红";
 	String ERROR_DATA = "数据错误,请清除数据库垃圾数据";
 	String INIT_QR_CODE = "请初始化二维码";
+	String NUMBER_ONE = "1";
+	String NO_MANAGER = "暂无区域经理";
 
 	Integer ADMIN_NUMBER = -1;
 	Integer MANAGER_NUMBER = 3;
@@ -41,6 +43,7 @@ public interface BashNumberInterface {
 
 	/**
 	 * 返回用户状态String
+	 *
 	 * @param statusNumber
 	 * @return
 	 */

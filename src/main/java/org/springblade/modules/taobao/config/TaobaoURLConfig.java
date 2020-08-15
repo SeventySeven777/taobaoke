@@ -33,11 +33,16 @@ public interface TaobaoURLConfig {
 	String INIT_STORE = "/init-store";
 	String UPDATE_USER_PASSWORD = "/update-password";
 	String SEARCH_USER_BY_PHONE_OR_NAME = "/search-user-by-something";
+	String DELETE_USER = "/delete-user";
+	String UPDATE_ACCOUNT = "/update-account";
 
 	/**
 	 * 店铺controller
 	 */
 	String GET_STORE_INFO = "/get-store-info";
+	String GET_STORE_PAGE = "/get-store-page-info";
+	String PUT_STORE_MANAGER = "/update-store-manager";
+	String DELETE_STORE_MANAGER = "/delete-store";
 
 	/**
 	 * 审核状态controller
@@ -50,4 +55,11 @@ public interface TaobaoURLConfig {
 	 * 分红controller
 	 */
 	String UPDATE_MANAGER_RATE = "/update-manager-rate";
+	String UPDATE_STORE_RATE = "/update-store-rate";
+
+	/**
+	 * manager Controller
+	 */
+	String GET_MANAGER_PAGE = "/get-manager-page";
+	String GET_MANAGER_INFO = "/get-manager-info";
 }

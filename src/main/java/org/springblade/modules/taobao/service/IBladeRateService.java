@@ -22,4 +22,13 @@ public interface IBladeRateService extends IService<BladeRate> {
 	 * @param rate   分红
 	 */
 	void updateManagerRate(String userId, BigDecimal rate);
+
+	/**
+	 * 获取manager Rate
+	 *
+	 * @param userId userId
+	 * @return rate
+	 */
+	BigDecimal getManagerRate(String userId);
+
 }

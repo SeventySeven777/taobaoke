@@ -32,14 +32,14 @@ public class BladeRateController {
 	private IBladeUserService iBladeUserService;
 
 	/**
-	 * 修改区经理分红比率
+	 * 修改区所有分红比率
 	 *
 	 * @param map 用户KV
 	 * @return 都返回成功
 	 */
 	@RequestMapping(value = UPDATE_MANAGER_RATE, method = RequestMethod.POST)
-	@ApiOperation(value = "修改分红", notes = "修改分红")
-	@ApiImplicitParam(name = "map", value = "key为userId,value放分红比率不得超过100", dataType = "String", required = false)
+	@ApiOperation(value = "修改所有分红", notes = "修改分红")
+	@ApiImplicitParam(name = "map", value = "key为userId,value放分红比率不得超过100", dataType = "String", required = true)
 	public R<String> initUserManagerRate(@RequestBody Map<String, String> map) {
 		map.forEach((k, v) -> {
 			BigDecimal rate = new BigDecimal(v);
@@ -49,4 +49,5 @@ public class BladeRateController {
 		});
 		return R.success(SAVE_OK);
 	}
+
 }

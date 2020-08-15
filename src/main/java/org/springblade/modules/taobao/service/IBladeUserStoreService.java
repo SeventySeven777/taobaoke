@@ -15,4 +15,11 @@ import org.springblade.modules.taobao.entity.BladeUserStore;
 public interface IBladeUserStoreService extends IService<BladeUserStore> {
 
 
+	/**
+	 * 删除一切
+	 *
+	 * @param storeId 门店ID
+	 * @return 成功
+	 */
+	R<String> deleteStore(String storeId);
 }

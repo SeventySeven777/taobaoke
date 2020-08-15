@@ -13,4 +13,5 @@ import org.springblade.modules.taobao.entity.BladeUserBash;
  */
 public interface BladeUserBashMapper extends BaseMapper<BladeUserBash> {
 
+
 }

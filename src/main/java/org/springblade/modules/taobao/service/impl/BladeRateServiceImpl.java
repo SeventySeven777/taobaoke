@@ -42,4 +42,10 @@ public class BladeRateServiceImpl extends ServiceImpl<BladeRateMapper, BladeRate
 			throw new SqlException(SAVE_ERROR);
 		}
 	}
+
+	@Override
+	public BigDecimal getManagerRate(String userId) {
+		return bladeRateMapper.selectById(userId).getRate();
+	}
+
 }

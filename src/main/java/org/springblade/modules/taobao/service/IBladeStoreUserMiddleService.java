@@ -1,6 +1,7 @@
 package org.springblade.modules.taobao.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.entity.BladeStoreUserMiddle;
 
 /**
@@ -21,4 +22,29 @@ public interface IBladeStoreUserMiddleService extends IService<BladeStoreUserMid
 	 * @return
 	 */
 	Boolean createLine(String managerId, String storeId);
+
+	/**
+	 * 获取门店总数
+	 *
+	 * @param userId userId
+	 * @return total
+	 */
+	Integer getMiddleNumber(String userId);
+
+	/**
+	 * 获取区域经理name
+	 *
+	 * @param storeId storeId
+	 * @return name
+	 */
+	String getManageName(String storeId);
+
+	/**
+	 * 修改负责人
+	 *
+	 * @param userId  id
+	 * @param storeId id
+	 * @return 成功
+	 */
+	R<String> updateManager(String userId, String storeId);
 }

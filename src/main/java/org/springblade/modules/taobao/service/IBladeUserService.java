@@ -1,5 +1,6 @@
 package org.springblade.modules.taobao.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.LoginUserDTO;
@@ -97,4 +98,22 @@ public interface IBladeUserService extends IService<BladeUser> {
 	 * @return true 修改失败 false 修改成功
 	 */
 	Boolean updateStatus(String userId, Integer status);
+
+	/**
+	 * 获取所有用户IDS
+	 *
+	 * @param size    分页
+	 * @param current 分页
+	 * @return allUserIds
+	 */
+	List<String> getAllUserIds(Integer size, Integer current);
+
+	/**
+	 * 获取区域经理审核过,分页数据
+	 *
+	 * @param size    分页
+	 * @param current 分页
+	 * @return 分页DATA
+	 */
+	R<Page<BladeUser>> getManagerPage(Integer size, Integer current);
 }

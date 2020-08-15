@@ -36,4 +36,12 @@ public interface IBladeUserBashService extends IService<BladeUserBash> {
 	 * @return ids
 	 */
 	List<String> getUserIdBySomething(String what, Integer size, Integer current);
+
+	/**
+	 * 删除账号及其所有数据
+	 *
+	 * @param userId userID
+	 * @return 成功
+	 */
+	R<String> deleteUser(String userId);
 }
