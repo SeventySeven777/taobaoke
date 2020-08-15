@@ -30,4 +30,10 @@ public interface TaobaoURLConfig {
 	 * 用户controller
 	 */
 	String INIT_USER = "/init-user";
+	String INIT_STORE = "/init-store";
+
+	/**
+	 * 店铺controller
+	 */
+	String GET_STORE_INFO = "/get-store-info";
 }

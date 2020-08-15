@@ -17,6 +17,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
 /**
  * 登录页面controller
+ *
  * @author SeventySeven
  * @since 2020-08-14
  */
@@ -29,19 +30,18 @@ public class LoginController {
 
 	/**
 	 * 用户登录 用户登录返回用户信息+token 管理员登录返回token
+	 *
 	 * @param loginUserDTO
 	 * @return
 	 */
-	@RequestMapping(value = LOGIN_USER,method = RequestMethod.POST)
-	@ApiOperation(value = "用户或管理员登录", notes = "登录")
-	public R loginTaoBao(@RequestBody LoginUserDTO loginUserDTO){
+	@RequestMapping(value = LOGIN_USER, method = RequestMethod.POST)
+	@ApiOperation(value = "任何角色登录", notes = "登录")
+	public R loginTaoBao(@RequestBody LoginUserDTO loginUserDTO) {
 		if (CheckObjAllFieldsIsNullUtils.checkObjAllFieldsIsNull(loginUserDTO)) {
 			return R.fail(FIELD_MISSING);
 		}
 		return iBladeUserService.login(loginUserDTO);
 	}
-
-
 
 
 }

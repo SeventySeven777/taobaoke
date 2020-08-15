@@ -13,4 +13,12 @@ import org.springblade.modules.taobao.entity.BladeStoreUserMiddle;
  */
 public interface IBladeStoreUserMiddleService extends IService<BladeStoreUserMiddle> {
 
+	/**
+	 * 关联店铺及区域经理
+	 *
+	 * @param managerId
+	 * @param storeId
+	 * @return
+	 */
+	Boolean createLine(String managerId, String storeId);
 }

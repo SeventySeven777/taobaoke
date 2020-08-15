@@ -1,5 +1,6 @@
 package org.springblade.test;
 
+import cn.hutool.core.lang.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springblade.core.test.BladeBootTest;
@@ -21,8 +22,7 @@ public class BladeTest {
 
 	@Test
 	public void contextLoads() {
-		int count = noticeService.count();
-		System.out.println("notice数量：[" + count + "] 个");
+
 	}
 
 }

@@ -16,8 +16,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class LoginUserDTO {
-	@ApiModelProperty(value = "用户账号同手机号")
+	@ApiModelProperty(value = "用户账号同手机号",name = "phone",required = true)
 	private String phone;
-	@ApiModelProperty(value = "密码需加密sha1")
+	@ApiModelProperty(value = "密码需加密MD5 32小写",name = "password",required = true)
 	private String password;
 }

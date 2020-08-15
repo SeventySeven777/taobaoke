@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class BladeStoreUserMiddleServiceImpl extends ServiceImpl<BladeStoreUserMiddleMapper, BladeStoreUserMiddle> implements IBladeStoreUserMiddleService {
 
+	@Override
+	public Boolean createLine(String managerId, String storeId) {
+		return this.save(new BladeStoreUserMiddle().setUserId(managerId).setStoreId(storeId));
+	}
 }
