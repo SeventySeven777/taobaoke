@@ -24,7 +24,7 @@ public class BladeUserStoreController {
 	private IBladeUserStoreService iBladeUserStoreService;
 
 	/**
-	 * 用户注册,如果手机号重复将不能注册
+	 * 查看店铺信息
 	 *
 	 * @param storeId 注册DTO
 	 * @return
@@ -34,7 +34,6 @@ public class BladeUserStoreController {
 	public R getStoreInfo(@RequestParam("store-id") @NotNull String storeId) {
 		return R.data(iBladeUserStoreService.getById(storeId));
 	}
-
 
 
 }

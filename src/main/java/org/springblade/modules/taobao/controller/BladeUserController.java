@@ -1,23 +1,24 @@
 package org.springblade.modules.taobao.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.taobao.dto.CheckUserResultVO;
 import org.springblade.modules.taobao.dto.InitStoreDTO;
 import org.springblade.modules.taobao.dto.InitUserDTO;
+import org.springblade.modules.taobao.dto.UpdateUserPasswordDTO;
 import org.springblade.modules.taobao.entity.BladeUser;
 import org.springblade.modules.taobao.entity.BladeUserBash;
 import org.springblade.modules.taobao.entity.BladeUserStore;
-import org.springblade.modules.taobao.service.IBladeStoreUserMiddleService;
-import org.springblade.modules.taobao.service.IBladeUserCheckService;
-import org.springblade.modules.taobao.service.IBladeUserService;
-import org.springblade.modules.taobao.service.IBladeUserStoreService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springblade.modules.taobao.service.*;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 import static org.springblade.modules.taobao.config.MethodConfig.*;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
@@ -31,10 +32,11 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RequestMapping(BLADE_USER_URL)
 @AllArgsConstructor
 public class BladeUserController {
-	private IBladeUserService iBladeUserService;
-	private IBladeUserCheckService iBladeUserCheckService;
-	private IBladeUserStoreService iBladeUserStoreService;
-	private IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
+	private final IBladeUserService iBladeUserService;
+	private final IBladeUserCheckService iBladeUserCheckService;
+	private final IBladeUserStoreService iBladeUserStoreService;
+	private final IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
+	private final IBladeUserBashService iBladeUserBashService;
 
 	/**
 	 * 用户注册,如果手机号重复将不能注册
@@ -88,5 +90,55 @@ public class BladeUserController {
 		}
 		return R.success(STORE_INIT_OK);
 	}
+
+	/**
+	 * 用户修改密码
+	 *
+	 * @param updateUserPasswordDTO
+	 * @return
+	 */
+	@RequestMapping(value = UPDATE_USER_PASSWORD, method = RequestMethod.POST)
+	@ApiOperation(value = "修改密码", notes = "注册")
+	public R updateUserPassword(@RequestBody UpdateUserPasswordDTO updateUserPasswordDTO) {
+		BladeUser bladeUser = iBladeUserService.getById(updateUserPasswordDTO.getUserId());
+		if (null == bladeUser) {
+			return R.fail(NO_QUERY_USER);
+		}
+		if (iBladeUserService.whetherPassword(bladeUser.getPassword(), updateUserPasswordDTO.getPasswordOld())) {
+			return iBladeUserService.setPassword(bladeUser, updateUserPasswordDTO.getPasswordNew());
+		}
+		return R.fail(PASSWORD_ERROR);
+	}
+
+	/**
+	 * 模糊搜索
+	 *
+	 * @param what    条件
+	 * @param size    分页
+	 * @param current 分页
+	 * @return 分页结果
+	 */
+	@RequestMapping(value = SEARCH_USER_BY_PHONE_OR_NAME, method = RequestMethod.GET)
+	@ApiOperation(value = "搜索用户", notes = "注册")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "size", value = "分页数据,如果不传默认50"),
+		@ApiImplicitParam(name = "current", value = "分页数据,如果不传默认0"),
+		@ApiImplicitParam(name = "what", value = "条件传空查所有(ps此处查所有会把店铺,一起查出来)")
+	})
+	public R<CheckUserResultVO> searchUserByPhoneOrName(@RequestParam("what") String what,
+														@RequestParam("size") Integer size,
+														@RequestParam("current") Integer current) {
+		if (size == null || current == null || size.equals(0) || current.equals(0)) {
+			size = 50;
+			current = 1;
+		}
+		List<String> userIds = null;
+		if (!StrUtil.isEmpty(what)) {
+			userIds = iBladeUserBashService.getUserIdBySomething(what, size, current);
+			//获取到用户ids
+		}
+		return iBladeUserBashService.getUserByIds(userIds, size, current);
+	}
+
 
 }

@@ -31,9 +31,23 @@ public interface TaobaoURLConfig {
 	 */
 	String INIT_USER = "/init-user";
 	String INIT_STORE = "/init-store";
+	String UPDATE_USER_PASSWORD = "/update-password";
+	String SEARCH_USER_BY_PHONE_OR_NAME = "/search-user-by-something";
 
 	/**
 	 * 店铺controller
 	 */
 	String GET_STORE_INFO = "/get-store-info";
+
+	/**
+	 * 审核状态controller
+	 */
+	String GET_USER_CHECK_BY_STATUS = "/get-user-check-by-status";
+	String CHECK_USER_STATUS = "/check-user";
+	String GET_MANAGER_OPINION = "/get-user-check-opinion";
+
+	/**
+	 * 分红controller
+	 */
+	String UPDATE_MANAGER_RATE = "/update-manager-rate";
 }

@@ -24,6 +24,9 @@ public interface MethodConfig {
 	String STORE_INIT_ERROR = "创建店铺失败,请重试";
 	String CREATE_LINE_ERROR = "关联店铺失败";
 	String STORE_INIT_OK = "店铺创建成功";
+	String NO_QUERY_USER = "未查询到该用户,检查ID";
+	String PASSWORD_ERROR = "密码错误";
+	String SAVE_OK = "保存成功";
 
 
 }
