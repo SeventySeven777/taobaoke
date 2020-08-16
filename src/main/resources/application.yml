@@ -50,7 +50,7 @@ mybatis-plus:
     banner: false
     db-config:
       #主键类型  0:"数据库ID自增", 1:"不操作", 2:"用户输入ID",3:"数字型snowflake", 4:"全局唯一ID UUID", 5:"字符串型snowflake";
-      id-type: auto
+      id-type: 2
       #字段策略
       insert-strategy: not_null
       update-strategy: not_null
@@ -98,7 +98,7 @@ blade:
   secure:
     skip-url:
       - /blade-test/**
-      - /taobao/**
+      - /taobao/login/**
     client:
       - client-id: sword
         path-patterns:

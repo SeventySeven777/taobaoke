@@ -48,7 +48,7 @@ public class BladeWalletHistory implements Serializable {
 	/**
 	 * 什么原因改变暂定 0 分成加钱 1 提现
 	 */
-	@ApiModelProperty(value = "什么原因改变暂定 0 分成加钱 1 提现")
+	@ApiModelProperty(value = "什么原因改变 -1 管理员加钱 10 提现扣钱 7订单加钱")
 	@TableField(value = "reason", fill = FieldFill.INSERT_UPDATE)
 	private Integer reason;
 	/**

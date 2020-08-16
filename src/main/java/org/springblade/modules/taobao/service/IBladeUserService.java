@@ -2,6 +2,7 @@ package org.springblade.modules.taobao.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springblade.core.secure.AuthInfo;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.LoginUserDTO;
 import org.springblade.modules.taobao.entity.BladeUser;
@@ -26,7 +27,7 @@ public interface IBladeUserService extends IService<BladeUser> {
 	 * @param loginUserDTO 登录DTO
 	 * @return token
 	 */
-	R login(LoginUserDTO loginUserDTO);
+	R<AuthInfo> login(LoginUserDTO loginUserDTO);
 
 	/**
 	 * 判断用户手机号是否存在

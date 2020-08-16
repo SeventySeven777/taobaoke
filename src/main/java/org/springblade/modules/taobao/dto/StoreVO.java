@@ -34,9 +34,9 @@ public class StoreVO {
 	@ApiModelProperty(value = "账号")
 	private String account;
 	@ApiModelProperty(value = "所属区域经理")
-	private String ManagerName;
+	private String managerName;
 	@ApiModelProperty(value = "二维码")
-	private String QRCode;
+	private String qRCode;
 	@ApiModelProperty(value = "图片")
 	private String image;
 	@ApiModelProperty(value = "分红")

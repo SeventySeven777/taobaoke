@@ -45,9 +45,9 @@ public class BladeUserBashController {
 	/**
 	 * 获取区域经理管理页面数据
 	 *
-	 * @param size
-	 * @param current
-	 * @return
+	 * @param size    分页
+	 * @param current 分页
+	 * @return 分页结果
 	 */
 	@RequestMapping(value = GET_MANAGER_PAGE, method = RequestMethod.GET)
 	@ApiOperation(value = "获取区域经理管理页面数据", notes = "平台工作人员基础信息表接口管理")

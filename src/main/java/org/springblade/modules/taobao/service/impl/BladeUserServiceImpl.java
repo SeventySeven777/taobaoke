@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springblade.core.secure.AuthInfo;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.auth.utils.TokenUtil;
 import org.springblade.modules.exception.SqlException;
 import org.springblade.modules.taobao.config.BashNumberInterface;
 import org.springblade.modules.taobao.dto.LoginUserDTO;
@@ -55,9 +57,16 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	 * @return token
 	 */
 	@Override
-	public R login(LoginUserDTO loginUserDTO) {
+	public R<AuthInfo> login(LoginUserDTO loginUserDTO) {
+		BladeUser bladeUser = bladeUserMapper.selectOne(Wrappers.<BladeUser>query().lambda()
+			.eq(BladeUser::getPhone, loginUserDTO.getPhone()));
+		if (null == bladeUser || bladeUser.getPassword().equals(loginUserDTO.getPassword())) {
+			return R.fail(NO_USER_OR_PASSWORD_ERROR);
+		}
 
-		return null;
+		return R.data(TokenUtil.createAuthInfo(bladeUser, bladeUserBashMapper.selectById(bladeUser.getId()).getUserName(),
+			bashNumberInterface.getUserRole(bladeUser.getRole())));
+
 	}
 
 	/**

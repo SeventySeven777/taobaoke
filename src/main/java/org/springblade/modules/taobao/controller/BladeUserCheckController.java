@@ -61,7 +61,7 @@ public class BladeUserCheckController {
 	 */
 	@RequestMapping(value = CHECK_USER_STATUS, method = RequestMethod.PUT)
 	@ApiOperation(value = "进行审核", notes = "进行审核")
-	public R checkUserStatus(@RequestBody CheckUserDTO checkUserDTO) {
+	public R<String> checkUserStatus(@RequestBody CheckUserDTO checkUserDTO) {
 		if (iBladeUserService.examineUser(checkUserDTO.getUserId())) {
 			return R.fail(NO_QUERY_USER);
 		}

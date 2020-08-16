@@ -3,6 +3,7 @@ package org.springblade.modules.taobao.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springblade.core.secure.AuthInfo;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.LoginUserDTO;
 import org.springblade.modules.taobao.service.IBladeUserService;
@@ -26,17 +27,17 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @AllArgsConstructor
 @Api(value = "登录", tags = "登录")
 public class LoginController {
-	private IBladeUserService iBladeUserService;
+	private final IBladeUserService iBladeUserService;
 
 	/**
 	 * 用户登录 用户登录返回用户信息+token 管理员登录返回token
 	 *
-	 * @param loginUserDTO
-	 * @return
+	 * @param loginUserDTO 登录数据
+	 * @return token包
 	 */
 	@RequestMapping(value = LOGIN_USER, method = RequestMethod.POST)
 	@ApiOperation(value = "任何角色登录", notes = "登录")
-	public R loginTaoBao(@RequestBody LoginUserDTO loginUserDTO) {
+	public R<AuthInfo> loginTaoBao(@RequestBody LoginUserDTO loginUserDTO) {
 		if (CheckObjAllFieldsIsNullUtils.checkObjAllFieldsIsNull(loginUserDTO)) {
 			return R.fail(FIELD_MISSING);
 		}

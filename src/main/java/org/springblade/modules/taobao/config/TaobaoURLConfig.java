@@ -8,18 +8,18 @@ package org.springblade.modules.taobao.config;
  * @since 2020-08-14
  */
 public interface TaobaoURLConfig {
-	String bashAPI = "/taobao";
-	String BLADE_ADMIN_ACCOUNT_URL = bashAPI + "/blade-admin-account";
-	String BLADE_ORDER_URL = bashAPI + "/blade-order";
-	String BLADE_RATE_URL = bashAPI + "/blade-rate";
-	String BLADE_STORE_USER_MIDDLE_URL = bashAPI + "/blade-store-user-middle";
-	String BLADE_USER_BASH_URL = bashAPI + "/blade-user-bash";
-	String BLADE_USER_CHECK_URL = bashAPI + "/blade-user-check";
-	String BLADE_USER_URL = bashAPI + "/blade-user";
-	String BLADE_USER_STORE_URL = bashAPI + "/blade-user-store";
-	String BLADE_WALLET_URL = bashAPI + "/blade-wallet";
-	String BLADE_WALLET_HISTORY_URL = bashAPI + "/blade-wallet-history";
-	String BLADE_LOGIN_URL = bashAPI + "/login";
+	String BASH_API = "/taobao";
+	String BLADE_ADMIN_ACCOUNT_URL = BASH_API + "/blade-admin-account";
+	String BLADE_ORDER_URL = BASH_API + "/blade-order";
+	String BLADE_RATE_URL = BASH_API + "/blade-rate";
+	String BLADE_STORE_USER_MIDDLE_URL = BASH_API + "/blade-store-user-middle";
+	String BLADE_USER_BASH_URL = BASH_API + "/blade-user-bash";
+	String BLADE_USER_CHECK_URL = BASH_API + "/blade-user-check";
+	String BLADE_USER_URL = BASH_API + "/blade-user";
+	String BLADE_USER_STORE_URL = BASH_API + "/blade-user-store";
+	String BLADE_WALLET_URL = BASH_API + "/blade-wallet";
+	String BLADE_WALLET_HISTORY_URL = BASH_API + "/blade-wallet-history";
+	String BLADE_LOGIN_URL = BASH_API + "/login";
 
 	/**
 	 * 登录controller
@@ -62,4 +62,13 @@ public interface TaobaoURLConfig {
 	 */
 	String GET_MANAGER_PAGE = "/get-manager-page";
 	String GET_MANAGER_INFO = "/get-manager-info";
+
+	/**
+	 * wallet Controller
+	 */
+	String GET_USER_MONEY = "/get-user-wallet";
+	String SUB_USER_MONEY = "/sub-user-wallet";
+	String ADD_ADMIN_MONEY = "/add_admin_money";
+	String ADMIN_INIT_WALLET = "/";
+	String GET_USER_MONEY_HISTORY = "/get-user-wallet-history";
 }

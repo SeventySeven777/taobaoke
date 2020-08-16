@@ -316,20 +316,6 @@ public class SecureUtil {
 	 * @return jwt
 	 */
 	public static TokenInfo createJWT(Map<String, String> user, String audience, String issuer, String tokenType) {
-
-		String[] tokens = extractAndDecodeHeader();
-		assert tokens.length == 2;
-		String clientId = tokens[0];
-		String clientSecret = tokens[1];
-
-		// 获取客户端信息
-		IClientDetails clientDetails = clientDetails(clientId);
-
-		// 校验客户端信息
-		if (!validateClient(clientDetails, clientId, clientSecret)) {
-			throw new SecureException("客户端认证失败!");
-		}
-
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
 		long nowMillis = System.currentTimeMillis();
@@ -347,19 +333,8 @@ public class SecureUtil {
 
 		//设置JWT参数
 		user.forEach(builder::claim);
-
-		//设置应用id
-		builder.claim(CLIENT_ID, clientId);
-
-		//添加Token过期时间
 		long expireMillis;
-		if (tokenType.equals(TokenConstant.ACCESS_TOKEN)) {
-			expireMillis = clientDetails.getAccessTokenValidity() * 1000;
-		} else if (tokenType.equals(TokenConstant.REFRESH_TOKEN)) {
-			expireMillis = clientDetails.getRefreshTokenValidity() * 1000;
-		} else {
-			expireMillis = getExpire();
-		}
+		expireMillis = getExpire();
 		long expMillis = nowMillis + expireMillis;
 		Date exp = new Date(expMillis);
 		builder.setExpiration(exp).setNotBefore(now);

@@ -21,6 +21,8 @@ public interface BashNumberInterface {
 	String INIT_QR_CODE = "请初始化二维码";
 	String NUMBER_ONE = "1";
 	String NO_MANAGER = "暂无区域经理";
+	String ADMIN_ID = "admin";
+
 
 	Integer ADMIN_NUMBER = -1;
 	Integer MANAGER_NUMBER = 3;
@@ -31,6 +33,10 @@ public interface BashNumberInterface {
 	Integer STATUS_OK_CHECK_NUMBER = 1;
 	Integer STATUS_OK_CHECK_NO_RATE_NUMBER = 2;
 	BigDecimal INIT_USER_MONEY = new BigDecimal(0);
+	Integer MONEY_STATUS_NO = 0;
+	Integer MONEY_STATUS_OK = 1;
+	Integer WITHDRAW = 10;
+	Integer ADMIN_ADD_MONEY = -1;
 
 
 	/**

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.CheckUserResultVO;
 import org.springblade.modules.taobao.dto.InitStoreDTO;
@@ -35,8 +34,6 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @AllArgsConstructor
 public class BladeUserController {
 	private final IBladeUserService iBladeUserService;
-	private final IBladeUserCheckService iBladeUserCheckService;
-	private final IBladeUserStoreService iBladeUserStoreService;
 	private final IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
 	private final IBladeUserBashService iBladeUserBashService;
 
@@ -44,11 +41,11 @@ public class BladeUserController {
 	 * 用户注册,如果手机号重复将不能注册
 	 *
 	 * @param initUserDTO 注册DTO
-	 * @return
+	 * @return isOk
 	 */
 	@RequestMapping(value = INIT_USER, method = RequestMethod.POST)
 	@ApiOperation(value = "经理注册", notes = "平台用户表接口管理")
-	public R initUser(@RequestBody InitUserDTO initUserDTO) {
+	public R<String> initUser(@RequestBody InitUserDTO initUserDTO) {
 		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
 			//判断手机号是否注册
 			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
@@ -67,11 +64,11 @@ public class BladeUserController {
 	 * 创建店铺 手机号重复 经理ID无人则不能注册
 	 *
 	 * @param initStoreDTO 注册DTO
-	 * @return
+	 * @return isok
 	 */
 	@RequestMapping(value = INIT_STORE, method = RequestMethod.POST)
 	@ApiOperation(value = "门店注册", notes = "平台用户表接口管理")
-	public R initStore(@RequestBody InitStoreDTO initStoreDTO) {
+	public R<String> initStore(@RequestBody InitStoreDTO initStoreDTO) {
 		if (iBladeUserService.examineUser(initStoreDTO.getManagerId())) {
 			return R.fail(NO_MANAGER);
 		}
@@ -96,12 +93,12 @@ public class BladeUserController {
 	/**
 	 * 用户修改密码
 	 *
-	 * @param updateUserPasswordDTO
-	 * @return
+	 * @param updateUserPasswordDTO 修改密码FTO
+	 * @return isOK
 	 */
 	@RequestMapping(value = UPDATE_USER_PASSWORD, method = RequestMethod.POST)
 	@ApiOperation(value = "修改密码", notes = "平台用户表接口管理")
-	public R updateUserPassword(@RequestBody UpdateUserPasswordDTO updateUserPasswordDTO) {
+	public R<String> updateUserPassword(@RequestBody UpdateUserPasswordDTO updateUserPasswordDTO) {
 		BladeUser bladeUser = iBladeUserService.getById(updateUserPasswordDTO.getUserId());
 		if (null == bladeUser) {
 			return R.fail(NO_QUERY_USER);
@@ -134,7 +131,7 @@ public class BladeUserController {
 			size = 50;
 			current = 1;
 		}
-		List<String> userIds = null;
+		List<String> userIds;
 		if (!StrUtil.isBlank(what)) {
 			userIds = iBladeUserBashService.getUserIdBySomething(what, size, current);
 			//获取到用户ids

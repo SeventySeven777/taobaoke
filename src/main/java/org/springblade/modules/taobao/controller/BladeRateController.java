@@ -28,8 +28,8 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RequestMapping(BLADE_RATE_URL)
 @AllArgsConstructor
 public class BladeRateController {
-	private IBladeRateService iBladeRateService;
-	private IBladeUserService iBladeUserService;
+	private final IBladeRateService iBladeRateService;
+	private final IBladeUserService iBladeUserService;
 
 	/**
 	 * 修改区所有分红比率

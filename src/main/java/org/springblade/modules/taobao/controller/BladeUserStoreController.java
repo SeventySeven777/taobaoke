@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
-import org.springblade.modules.taobao.dto.InitUserDTO;
 import org.springblade.modules.taobao.dto.StoreAllVO;
 import org.springblade.modules.taobao.dto.StoreVO;
 import org.springblade.modules.taobao.entity.BladeUser;
@@ -35,20 +34,20 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RequestMapping(BLADE_USER_STORE_URL)
 @AllArgsConstructor
 public class BladeUserStoreController {
-	private IBladeUserStoreService iBladeUserStoreService;
-	private IBladeUserService iBladeUserService;
-	private IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
-	private IBladeRateService iBladeRateService;
+	private final IBladeUserStoreService iBladeUserStoreService;
+	private final IBladeUserService iBladeUserService;
+	private final IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
+	private final IBladeRateService iBladeRateService;
 
 	/**
 	 * 查看店铺信息
 	 *
 	 * @param storeId 注册DTO
-	 * @return
+	 * @return BladeUserStore
 	 */
 	@RequestMapping(value = GET_STORE_INFO, method = RequestMethod.GET)
 	@ApiOperation(value = "查看店铺信息", notes = "查看店铺信息")
-	public R getStoreInfo(@RequestParam("store-id") @NotNull String storeId) {
+	public R<BladeUserStore> getStoreInfo(@RequestParam("store-id") @NotNull String storeId) {
 		return R.data(iBladeUserStoreService.getById(storeId));
 	}
 
