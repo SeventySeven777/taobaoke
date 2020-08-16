@@ -12,6 +12,7 @@ import org.springblade.modules.taobao.dto.CheckUserResultVO;
 import org.springblade.modules.taobao.dto.InitStoreDTO;
 import org.springblade.modules.taobao.dto.InitUserDTO;
 import org.springblade.modules.taobao.dto.UpdateUserPasswordDTO;
+import org.springblade.modules.taobao.entity.BladeRate;
 import org.springblade.modules.taobao.entity.BladeUser;
 import org.springblade.modules.taobao.entity.BladeUserBash;
 import org.springblade.modules.taobao.entity.BladeUserStore;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class BladeUserController {
 	private final IBladeUserService iBladeUserService;
 	private final IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
 	private final IBladeUserBashService iBladeUserBashService;
+	private final IBladeRateService iBladeRateService;
 
 	/**
 	 * 用户注册,如果手机号重复将不能注册
@@ -86,9 +89,11 @@ public class BladeUserController {
 			return R.fail(STORE_INIT_ERROR);
 			//initStore ok
 		}
-		if (iBladeStoreUserMiddleService.createLine(initStoreDTO.getManagerId(), bladeUserStoreR.getData().getId())) {
+		if (!iBladeStoreUserMiddleService.createLine(initStoreDTO.getManagerId(), bladeUserStoreR.getData().getId())) {
 			return R.fail(CREATE_LINE_ERROR);
 		}
+		//initRate
+		iBladeRateService.save(new BladeRate().setUserId(bladeUserStoreR.getData().getId()).setRate(new BigDecimal(0)));
 		return R.success(STORE_INIT_OK);
 	}
 
@@ -128,11 +133,11 @@ public class BladeUserController {
 		@ApiImplicitParam(name = "role", value = "角色 -1 admin 3 manager 2 store", required = true),
 		@ApiImplicitParam(name = "status", value = "4个状态", required = true)
 	})
-	public R<CheckUserResultVO> searchUserByPhoneOrName(@RequestParam("filter") @NotNull String what,
-														@RequestParam("size") @NotNull Integer size,
-														@RequestParam("current") @NotNull Integer current,
-														@RequestParam("role") @NotNull Integer role,
-														@RequestParam("status") @NotNull Integer status) {
+	public R<Object> searchUserByPhoneOrName(@RequestParam("filter") @NotNull String what,
+											 @RequestParam("size") @NotNull Integer size,
+											 @RequestParam("current") @NotNull Integer current,
+											 @RequestParam("role") @NotNull Integer role,
+											 @RequestParam("status") @NotNull Integer status) {
 		if (size == null || current == null || size.equals(0) || current.equals(0)) {
 			size = 50;
 			current = 1;
@@ -146,9 +151,9 @@ public class BladeUserController {
 			userIds = iBladeUserBashService.getUserIdBySomething(what, size, current, role, status, ids);
 			//获取到用户ids
 		} else {
-			userIds = iBladeUserService.getAllUserIds(size, current);
+			userIds = iBladeUserService.getAllUserIds(size, current, role, status);
 		}
-		return iBladeUserBashService.getUserByIds(userIds, size, current);
+		return iBladeUserBashService.getUserByIds(userIds, size, current, role);
 	}
 
 	/**
@@ -173,9 +178,9 @@ public class BladeUserController {
 	 */
 	@RequestMapping(value = UPDATE_ACCOUNT, method = RequestMethod.PUT)
 	@ApiOperation(value = "修改账号", notes = "平台用户表接口管理")
-	public R<String> updateAccount(@RequestParam("user-id") @NotNull String userId,
-								   @RequestParam("account") @NotNull String account) {
-		if (iBladeUserService.examineUserPhone(account)) {
+	public R<String> updateAccount(@RequestParam("account") @NotNull String account,
+								   @RequestParam("user-id") @NotNull String userId) {
+		if (!iBladeUserService.examineUserPhone(account)) {
 			BladeUser bladeUser = iBladeUserService.getById(userId);
 			iBladeUserService.updateById(bladeUser.setPhone(account));
 			return R.success(SAVE_OK);

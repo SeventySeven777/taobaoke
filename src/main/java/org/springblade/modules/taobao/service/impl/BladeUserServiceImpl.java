@@ -199,9 +199,9 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	}
 
 	@Override
-	public List<String> getAllUserIds(Integer size, Integer current) {
+	public List<String> getAllUserIds(Integer size, Integer current, Integer role, Integer status) {
 		Page<BladeUser> bladeUserPage = bladeUserMapper.selectPage(new Page<BladeUser>().setSize(size).setCurrent(current),
-			Wrappers.<BladeUser>query().lambda().isNotNull(BladeUser::getId));
+			Wrappers.<BladeUser>query().lambda().eq(BladeUser::getRole, role).eq(BladeUser::getStatus, status));
 		List<String> result = new ArrayList<>();
 		bladeUserPage.getRecords().forEach(item -> result.add(item.getId()));
 		result.add(String.valueOf(bladeUserPage.getTotal()));

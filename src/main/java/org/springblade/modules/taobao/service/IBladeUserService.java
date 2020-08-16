@@ -103,11 +103,13 @@ public interface IBladeUserService extends IService<BladeUser> {
 	/**
 	 * 获取所有用户IDS
 	 *
-	 * @param size    分页
-	 * @param current 分页
-	 * @return allUserIds
+	 * @param size    1
+	 * @param current 1
+	 * @param role    1
+	 * @param status  1
+	 * @return 1
 	 */
-	List<String> getAllUserIds(Integer size, Integer current);
+	List<String> getAllUserIds(Integer size, Integer current, Integer role, Integer status);
 
 	/**
 	 * 获取区域经理审核过,分页数据

@@ -45,7 +45,7 @@ public class BladeStoreUserMiddleServiceImpl extends ServiceImpl<BladeStoreUserM
 	@Override
 	public String getManageName(String storeId) {
 		BladeStoreUserMiddle one = this.getOne(Wrappers.<BladeStoreUserMiddle>query().lambda().eq(BladeStoreUserMiddle::getStoreId, storeId));
-		if (one.getUserId().equals(NUMBER_ONE)) {
+		if (null == one || one.getUserId().equals(NUMBER_ONE)) {
 			return NO_MANAGER;
 		}
 		return bladeUserBashMapper.selectById(one.getUserId()).getUserName();

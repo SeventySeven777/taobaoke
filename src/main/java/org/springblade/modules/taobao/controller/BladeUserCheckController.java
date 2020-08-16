@@ -46,11 +46,11 @@ public class BladeUserCheckController {
 	 */
 	@RequestMapping(value = GET_USER_CHECK_BY_STATUS, method = RequestMethod.GET)
 	@ApiOperation(value = "获取用户审核(分页)", notes = "获取用户审核(分页)")
-	public R<CheckUserResultVO> getUserCheckByStatus(@RequestParam("status") @NotNull Integer status,
+	public R<Object> getUserCheckByStatus(@RequestParam("status") @NotNull Integer status,
 													 @RequestParam("size") @NotNull Integer size,
 													 @RequestParam("current") @NotNull Integer current) {
 		List<String> userIds = iBladeUserService.getUserIdsByStatus(status, size, current, MANAGER_NUMBER);
-		return iBladeUserBashService.getUserByIds(userIds, size, current);
+		return iBladeUserBashService.getUserByIds(userIds, size, current,MANAGER_NUMBER);
 	}
 
 	/**

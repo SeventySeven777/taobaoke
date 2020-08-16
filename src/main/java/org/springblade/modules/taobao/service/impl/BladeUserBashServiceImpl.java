@@ -8,17 +8,21 @@ import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.CheckUserResultVO;
 import org.springblade.modules.taobao.dto.CheckUserVO;
-import org.springblade.modules.taobao.entity.BladeUserBash;
-import org.springblade.modules.taobao.entity.BladeUserCheck;
-import org.springblade.modules.taobao.entity.BladeWalletHistory;
+import org.springblade.modules.taobao.dto.StoreAllVO;
+import org.springblade.modules.taobao.dto.StoreVO;
+import org.springblade.modules.taobao.entity.*;
 import org.springblade.modules.taobao.mapper.*;
+import org.springblade.modules.taobao.service.IBladeRateService;
+import org.springblade.modules.taobao.service.IBladeStoreUserMiddleService;
 import org.springblade.modules.taobao.service.IBladeUserBashService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springblade.modules.taobao.config.BashNumberInterface.NUMBER_ONE;
+import static org.springblade.modules.taobao.config.BashNumberInterface.*;
 import static org.springblade.modules.taobao.config.MethodConfig.DELETE_OK;
 
 /**
@@ -39,6 +43,11 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 	private final BladeStoreUserMiddleMapper bladeStoreUserMiddleMapper;
 	private final BladeRateMapper bladeRateMapper;
 	private final BladeUserCheckMapper bladeUserCheckMapper;
+	private final BladeUserStoreMapper bladeUserStoreMapper;
+	@Autowired
+	private IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
+	@Autowired
+	private IBladeRateService iBladeRateService;
 
 	/**
 	 * 返回分页后的用户基础信息
@@ -49,25 +58,48 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 	 * @return 分页后的用户基础信息
 	 */
 	@Override
-	public R<CheckUserResultVO> getUserByIds(List<String> userIds, Integer size, Integer current) {
-		String stringTotal = userIds.get(userIds.size() - 1);
+	public R<Object> getUserByIds(List<String> userIds, Integer size, Integer current,Integer role) {
+		//String stringTotal = userIds.get(userIds.size() - 1);
 		//删除total 本来想删除total的由于为空时list为空下方会报错于是留着total了反正不影响
-		List<BladeUserBash> bladeUserBashes = bladeUserBashMapper.selectList(Wrappers.<BladeUserBash>query().lambda()
-			.in(BladeUserBash::getId, userIds));
-		List<CheckUserVO> voList = new ArrayList<>();
-		bladeUserBashes.forEach(item -> {
-			CheckUserVO checkUserVO = new CheckUserVO();
-			BeanUtil.copyProperties(item, checkUserVO);
-			BladeUserCheck bladeUserCheck = bladeUserCheckMapper.selectOne(Wrappers.<BladeUserCheck>query().lambda()
-				.eq(BladeUserCheck::getUserId, item.getId()));
-			if (null != bladeUserCheck) {
-				checkUserVO.setCheckTime(bladeUserCheck.getCreateTime().getTime());
-			}
-			voList.add(checkUserVO);
-		});
-		CheckUserResultVO checkUserResultVO = new CheckUserResultVO().setSize(size).setCurrent(current)
-			.setTotal(Long.valueOf(stringTotal)).setList(voList);
-		return R.data(checkUserResultVO);
+		return getUserInfoAll(userIds, size, current, role);
+	}
+
+	public R<Object> getUserInfoAll(List<String> userIds, Integer size, Integer current, Integer role) {
+		if (MANAGER_NUMBER.equals(role)) {
+			//区域经理
+			List<BladeUserBash> bladeUserBashes = bladeUserBashMapper.selectList(Wrappers.<BladeUserBash>query().lambda()
+				.in(BladeUserBash::getId, userIds));
+			List<CheckUserVO> voList = new ArrayList<>();
+			bladeUserBashes.forEach(item -> {
+				CheckUserVO checkUserVO = new CheckUserVO();
+				BeanUtil.copyProperties(item, checkUserVO);
+				BladeUserCheck bladeUserCheck = bladeUserCheckMapper.selectOne(Wrappers.<BladeUserCheck>query().lambda()
+					.eq(BladeUserCheck::getUserId, item.getId()));
+				if (null != bladeUserCheck) {
+					checkUserVO.setCheckTime(bladeUserCheck.getCreateTime().getTime());
+				}
+				voList.add(checkUserVO);
+			});
+			CheckUserResultVO checkUserResultVO = new CheckUserResultVO().setSize(size).setCurrent(current)
+				.setTotal(Long.valueOf(userIds.get(userIds.size() - 1))).setList(voList);
+			return R.data(checkUserResultVO);
+		} else{Long total = Long.valueOf(userIds.get(userIds.size() - 1));
+			userIds.remove(userIds.size() - 1);
+			StoreAllVO storeAllVO = new StoreAllVO();
+			List<StoreVO> list = new ArrayList<>();
+			userIds.forEach(item -> {
+				BladeUser bladeUser = bladeUserMapper.selectById(item);
+				BladeUserStore bladeUserStore = bladeUserStoreMapper.selectById(item);
+				String manageName = iBladeStoreUserMiddleService.getManageName(item);
+				BigDecimal managerRate = iBladeRateService.getManagerRate(item);
+				StoreVO storeVO = new StoreVO();
+				BeanUtil.copyProperties(bladeUserStore, storeVO);
+				storeVO.setStoreId(bladeUserStore.getId());
+				storeVO.setManagerName(manageName).setAccount(bladeUser.getPhone()).setRate(managerRate);
+				list.add(storeVO);
+			});
+			return R.data(storeAllVO.setList(list).setTotal(total).setSize(size).setCurrent(current));
+		}
 	}
 
 	/**

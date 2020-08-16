@@ -37,7 +37,7 @@ public class BladeRateServiceImpl extends ServiceImpl<BladeRateMapper, BladeRate
 	@Override
 	@Transactional(rollbackFor = SqlException.class)
 	public void updateManagerRate(String userId, BigDecimal rate) {
-		bladeRateMapper.delete(Wrappers.<BladeRate>query().lambda().eq(BladeRate::getUserId, rate));
+		bladeRateMapper.delete(Wrappers.<BladeRate>query().lambda().eq(BladeRate::getUserId, userId));
 		if (bladeRateMapper.insert(new BladeRate().setRate(rate).setUserId(userId)) != 1) {
 			throw new SqlException(SAVE_ERROR);
 		}

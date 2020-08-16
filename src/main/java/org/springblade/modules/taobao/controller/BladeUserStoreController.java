@@ -1,18 +1,17 @@
 package org.springblade.modules.taobao.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.StoreAllVO;
 import org.springblade.modules.taobao.dto.StoreVO;
+import org.springblade.modules.taobao.entity.BladeStoreUserMiddle;
 import org.springblade.modules.taobao.entity.BladeUser;
 import org.springblade.modules.taobao.entity.BladeUserStore;
-import org.springblade.modules.taobao.service.IBladeRateService;
-import org.springblade.modules.taobao.service.IBladeStoreUserMiddleService;
-import org.springblade.modules.taobao.service.IBladeUserService;
-import org.springblade.modules.taobao.service.IBladeUserStoreService;
+import org.springblade.modules.taobao.service.*;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springblade.modules.taobao.config.BashNumberInterface.STORE_NUMBER;
+import static org.springblade.modules.taobao.config.MethodConfig.NO_TIME;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
 /**
@@ -38,6 +38,7 @@ public class BladeUserStoreController {
 	private final IBladeUserService iBladeUserService;
 	private final IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
 	private final IBladeRateService iBladeRateService;
+	private final IBladeUserBashService iBladeUserBashService;
 
 	/**
 	 * 查看店铺信息
@@ -62,23 +63,12 @@ public class BladeUserStoreController {
 	@RequestMapping(value = GET_STORE_PAGE, method = RequestMethod.GET)
 	@ApiOperation(value = "通过状态查看店铺信息", notes = "查看店铺信息")
 	@ApiImplicitParam(name = "status", value = "状态码 1 已配置抽成,2 未配置抽成")
-	public R<StoreAllVO> getStorePageByStatus(@RequestParam("size") @NotNull Integer size,
-											  @RequestParam("current") @NotNull Integer current,
-											  @RequestParam("status") @NotNull Integer status) {
+	public R<Object> getStorePageByStatus(@RequestParam("size") @NotNull Integer size,
+										  @RequestParam("current") @NotNull Integer current,
+										  @RequestParam("status") @NotNull Integer status) {
 		List<String> userIdsByStatus = iBladeUserService.getUserIdsByStatus(status, size, current, STORE_NUMBER);
-		StoreAllVO storeAllVO = new StoreAllVO();
-		List<StoreVO> list = new ArrayList<>();
-		userIdsByStatus.forEach(item -> {
-			BladeUser bladeUser = iBladeUserService.getById(item);
-			BladeUserStore bladeUserStore = iBladeUserStoreService.getById(item);
-			String manageName = iBladeStoreUserMiddleService.getManageName(item);
-			BigDecimal managerRate = iBladeRateService.getManagerRate(item);
-			StoreVO storeVO = new StoreVO();
-			BeanUtil.copyProperties(storeVO, bladeUserStore);
-			storeVO.setManagerName(manageName).setAccount(bladeUser.getPhone()).setRate(managerRate);
-			list.add(storeVO);
-		});
-		return R.data(storeAllVO.setList(list).setTotal(Long.valueOf(userIdsByStatus.get(userIdsByStatus.size() - 1))).setSize(size).setCurrent(current));
+		//todo
+		return iBladeUserBashService.getUserByIds(userIdsByStatus, size, current, STORE_NUMBER);
 	}
 
 	/**
@@ -90,10 +80,12 @@ public class BladeUserStoreController {
 	 */
 	@RequestMapping(value = PUT_STORE_MANAGER, method = RequestMethod.PUT)
 	@ApiOperation(value = "修改负责人", notes = "查看店铺信息")
-	public R<String> updateManager(@RequestParam("manager-id") @NotNull String userId,
-								   @RequestParam("store-id") @NotNull String storeId) {
-		return iBladeStoreUserMiddleService.updateManager(userId, storeId);
+	public R updateManager(@RequestParam("store_human") @NotNull String userId,
+						   @RequestParam("store-id") @NotNull String storeId) {
+		return R.data(iBladeUserStoreService.updateById(iBladeUserStoreService.getById(storeId).setStoreHuman(userId)));
 	}
+
+
 
 	/**
 	 * 删除门店
