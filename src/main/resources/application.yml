@@ -98,7 +98,8 @@ blade:
   secure:
     skip-url:
       - /blade-test/**
-      - /taobao/login/**
+      #- /taobao/login/**
+      - /taobao/**
     client:
       - client-id: sword
         path-patterns:

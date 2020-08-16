@@ -33,9 +33,11 @@ public interface IBladeUserBashService extends IService<BladeUserBash> {
 	 * @param what    手机号或名字
 	 * @param size    分页
 	 * @param current 分页
+	 * @param role    角色
+	 * @param status  状态
 	 * @return ids
 	 */
-	List<String> getUserIdBySomething(String what, Integer size, Integer current);
+	List<String> getUserIdBySomething(String what, Integer size, Integer current, Integer role, Integer status, List<String> ids);
 
 	/**
 	 * 删除账号及其所有数据

@@ -1,10 +1,14 @@
 package org.springblade.modules.taobao.dto;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * 用于返回审核用户
@@ -88,6 +92,17 @@ public class CheckUserVO {
 	@ApiModelProperty(value = "学历照片")
 	private String educationImage;
 
+	/**
+	 * 支付宝账号用于后期提现
+	 */
+	@ApiModelProperty(value = "支付宝账号用于后期提现")
+	private String alipay;
+
+	/**
+	 * 申请时间
+	 */
+	@ApiModelProperty(value = "申请时间")
+	private Long checkTime;
 
 
 }

@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.CheckUserResultVO;
 import org.springblade.modules.taobao.dto.CheckUserVO;
-import org.springblade.modules.taobao.entity.BladeStoreUserMiddle;
 import org.springblade.modules.taobao.entity.BladeUserBash;
+import org.springblade.modules.taobao.entity.BladeUserCheck;
 import org.springblade.modules.taobao.entity.BladeWalletHistory;
 import org.springblade.modules.taobao.mapper.*;
 import org.springblade.modules.taobao.service.IBladeUserBashService;
@@ -38,6 +38,7 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 	private final BladeWalletHistoryMapper bladeWalletHistoryMapper;
 	private final BladeStoreUserMiddleMapper bladeStoreUserMiddleMapper;
 	private final BladeRateMapper bladeRateMapper;
+	private final BladeUserCheckMapper bladeUserCheckMapper;
 
 	/**
 	 * 返回分页后的用户基础信息
@@ -57,6 +58,11 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 		bladeUserBashes.forEach(item -> {
 			CheckUserVO checkUserVO = new CheckUserVO();
 			BeanUtil.copyProperties(item, checkUserVO);
+			BladeUserCheck bladeUserCheck = bladeUserCheckMapper.selectOne(Wrappers.<BladeUserCheck>query().lambda()
+				.eq(BladeUserCheck::getUserId, item.getId()));
+			if (null != bladeUserCheck) {
+				checkUserVO.setCheckTime(bladeUserCheck.getCreateTime().getTime());
+			}
 			voList.add(checkUserVO);
 		});
 		CheckUserResultVO checkUserResultVO = new CheckUserResultVO().setSize(size).setCurrent(current)
@@ -73,9 +79,9 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 	 * @return ids
 	 */
 	@Override
-	public List<String> getUserIdBySomething(String what, Integer size, Integer current) {
+	public List<String> getUserIdBySomething(String what, Integer size, Integer current, Integer role, Integer status, List<String> ids) {
 		Page<BladeUserBash> bladeUserBashPage = bladeUserBashMapper.selectPage(new Page<BladeUserBash>().setCurrent(current).setSize(size),
-			Wrappers.<BladeUserBash>query().lambda().like(BladeUserBash::getPhone, what).or().like(BladeUserBash::getUserName, what));
+			Wrappers.<BladeUserBash>query().lambda().in(BladeUserBash::getId, ids).like(BladeUserBash::getPhone, what).or().like(BladeUserBash::getUserName, what));
 		List<String> result = new ArrayList<>();
 		bladeUserBashPage.getRecords().forEach(item -> result.add(item.getId()));
 		result.add(String.valueOf(bladeUserBashPage.getTotal()));
@@ -92,7 +98,7 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 	public R<String> deleteUser(String userId) {
 		bladeUserBashMapper.deleteById(userId);
 		bladeRateMapper.deleteById(userId);
-		bladeStoreUserMiddleMapper.updateByDelete(NUMBER_ONE,userId);
+		bladeStoreUserMiddleMapper.updateByDelete(NUMBER_ONE, userId);
 		bladeWalletHistoryMapper.delete(Wrappers.<BladeWalletHistory>query().lambda().eq(BladeWalletHistory::getUserId, userId));
 		bladeWalletMapper.deleteById(userId);
 		bladeUserMapper.deleteById(userId);

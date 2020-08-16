@@ -15,11 +15,9 @@ import org.springblade.modules.taobao.service.IBladeRateService;
 import org.springblade.modules.taobao.service.IBladeStoreUserMiddleService;
 import org.springblade.modules.taobao.service.IBladeUserBashService;
 import org.springblade.modules.taobao.service.IBladeUserService;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
@@ -80,5 +78,12 @@ public class BladeUserBashController {
 	@ApiOperation(value = "获取区域经理个人资料", notes = "平台工作人员基础信息表接口管理")
 	public R<BladeUserBash> getManagerInfo(@RequestParam("user-id") @NotNull String userId) {
 		return R.data(iBladeUserBashService.getById(userId));
+	}
+
+	@RequestMapping(value = UPLOAD_IMAGE, method = RequestMethod.POST)
+	@ApiOperation(value = "上传任何东西都在这返回URL", notes = "平台工作人员基础信息表接口管理")
+	public R<String> uploadSomething(@RequestParam("userId") @NotNull String userId,
+									 @RequestBody @NotNull MultipartFile file) {
+		return null;
 	}
 }

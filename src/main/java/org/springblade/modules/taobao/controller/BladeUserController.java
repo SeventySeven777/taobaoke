@@ -2,6 +2,7 @@ package org.springblade.modules.taobao.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springblade.modules.taobao.config.MethodConfig.*;
@@ -122,18 +124,26 @@ public class BladeUserController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "size", value = "分页数据传0为默认", required = true),
 		@ApiImplicitParam(name = "current", value = "分页数据传0为默认", required = true),
-		@ApiImplicitParam(name = "what", value = "条件传空格查所有(ps此处查所有会把店铺,一起查出来)", required = true)
+		@ApiImplicitParam(name = "filter", value = "条件传空格查所有", required = true),
+		@ApiImplicitParam(name = "role", value = "角色 -1 admin 3 manager 2 store", required = true),
+		@ApiImplicitParam(name = "status", value = "4个状态", required = true)
 	})
-	public R<CheckUserResultVO> searchUserByPhoneOrName(@RequestParam("what") @NotNull String what,
+	public R<CheckUserResultVO> searchUserByPhoneOrName(@RequestParam("filter") @NotNull String what,
 														@RequestParam("size") @NotNull Integer size,
-														@RequestParam("current") @NotNull Integer current) {
+														@RequestParam("current") @NotNull Integer current,
+														@RequestParam("role") @NotNull Integer role,
+														@RequestParam("status") @NotNull Integer status) {
 		if (size == null || current == null || size.equals(0) || current.equals(0)) {
 			size = 50;
 			current = 1;
 		}
+		List<BladeUser> list = iBladeUserService.list(Wrappers.<BladeUser>query().lambda().eq(BladeUser::getRole, role)
+			.eq(BladeUser::getStatus, status));
+		List<String> ids = new ArrayList<>();
+		list.forEach(item -> ids.add(item.getId()));
 		List<String> userIds;
 		if (!StrUtil.isBlank(what)) {
-			userIds = iBladeUserBashService.getUserIdBySomething(what, size, current);
+			userIds = iBladeUserBashService.getUserIdBySomething(what, size, current, role, status, ids);
 			//获取到用户ids
 		} else {
 			userIds = iBladeUserService.getAllUserIds(size, current);

@@ -45,7 +45,7 @@ public class BladeRateServiceImpl extends ServiceImpl<BladeRateMapper, BladeRate
 
 	@Override
 	public BigDecimal getManagerRate(String userId) {
-		return bladeRateMapper.selectById(userId).getRate();
+		return bladeRateMapper.selectOne(Wrappers.<BladeRate>query().lambda().eq(BladeRate::getUserId, userId)).getRate();
 	}
 
 }

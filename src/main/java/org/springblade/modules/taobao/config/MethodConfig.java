@@ -31,6 +31,7 @@ public interface MethodConfig {
 	String MONEY_ERROR = "余额不足";
 	String INIT_OK = "管理员初始化成功";
 	String NO_USER_OR_PASSWORD_ERROR = "用户名或密码错误";
+	String NO_TIME = "NULL";
 
 
 }

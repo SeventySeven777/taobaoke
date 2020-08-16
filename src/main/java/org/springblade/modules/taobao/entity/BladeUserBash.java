@@ -61,7 +61,7 @@ public class BladeUserBash implements Serializable {
 	 */
 	@ApiModelProperty(value = "工作年限")
 	@TableField(value = "work_year", fill = FieldFill.INSERT_UPDATE)
-	private Integer workYear;
+	private String workYear;
 	/**
 	 * 简历URL
 	 */

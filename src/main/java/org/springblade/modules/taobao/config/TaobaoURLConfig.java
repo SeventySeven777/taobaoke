@@ -20,6 +20,7 @@ public interface TaobaoURLConfig {
 	String BLADE_WALLET_URL = BASH_API + "/blade-wallet";
 	String BLADE_WALLET_HISTORY_URL = BASH_API + "/blade-wallet-history";
 	String BLADE_LOGIN_URL = BASH_API + "/login";
+	String FILE_LOAD_URL = BASH_API + "/file";
 
 	/**
 	 * 登录controller
@@ -62,6 +63,7 @@ public interface TaobaoURLConfig {
 	 */
 	String GET_MANAGER_PAGE = "/get-manager-page";
 	String GET_MANAGER_INFO = "/get-manager-info";
+	String UPLOAD_IMAGE = "/upload-images";
 
 	/**
 	 * wallet Controller

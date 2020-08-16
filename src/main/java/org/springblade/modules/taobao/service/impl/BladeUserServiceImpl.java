@@ -13,14 +13,8 @@ import org.springblade.modules.auth.utils.TokenUtil;
 import org.springblade.modules.exception.SqlException;
 import org.springblade.modules.taobao.config.BashNumberInterface;
 import org.springblade.modules.taobao.dto.LoginUserDTO;
-import org.springblade.modules.taobao.entity.BladeUser;
-import org.springblade.modules.taobao.entity.BladeUserBash;
-import org.springblade.modules.taobao.entity.BladeUserStore;
-import org.springblade.modules.taobao.entity.BladeWallet;
-import org.springblade.modules.taobao.mapper.BladeUserBashMapper;
-import org.springblade.modules.taobao.mapper.BladeUserMapper;
-import org.springblade.modules.taobao.mapper.BladeUserStoreMapper;
-import org.springblade.modules.taobao.mapper.BladeWalletMapper;
+import org.springblade.modules.taobao.entity.*;
+import org.springblade.modules.taobao.mapper.*;
 import org.springblade.modules.taobao.service.IBladeUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +43,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	private final BladeUserMapper bladeUserMapper;
 	private final BladeWalletMapper bladeWalletMapper;
 	private final BladeUserStoreMapper bladeUserStoreMapper;
+	private final BladeUserCheckMapper bladeUserCheckMapper;
 
 	/**
 	 * 用户登录 用户登录返回用户信息+token 管理员登录返回token
@@ -103,6 +98,8 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		//initUserWallet
 		BladeWallet bladeWallet = new BladeWallet().setId(userId);
 		initUserWallet(bladeWallet, INIT_USER_MONEY);
+		//initCheck
+		bladeUserCheckMapper.insert(new BladeUserCheck().setUserId(userId).setCreateTime(new Date()));
 		return R.data(bladeUser);
 	}
 
