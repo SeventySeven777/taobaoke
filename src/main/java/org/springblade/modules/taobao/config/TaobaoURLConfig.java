@@ -36,6 +36,7 @@ public interface TaobaoURLConfig {
 	String SEARCH_USER_BY_PHONE_OR_NAME = "/search-user-by-something";
 	String DELETE_USER = "/delete-user";
 	String UPDATE_ACCOUNT = "/update-account";
+	String GET_MANAGER_LIST = "/get-manager-list";
 
 	/**
 	 * 店铺controller

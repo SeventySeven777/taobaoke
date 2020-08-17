@@ -8,10 +8,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
-import org.springblade.modules.taobao.dto.CheckUserResultVO;
-import org.springblade.modules.taobao.dto.InitStoreDTO;
-import org.springblade.modules.taobao.dto.InitUserDTO;
-import org.springblade.modules.taobao.dto.UpdateUserPasswordDTO;
+import org.springblade.modules.taobao.dto.*;
 import org.springblade.modules.taobao.entity.BladeRate;
 import org.springblade.modules.taobao.entity.BladeUser;
 import org.springblade.modules.taobao.entity.BladeUserBash;
@@ -177,7 +174,7 @@ public class BladeUserController {
 	 * @return isOk
 	 */
 	@RequestMapping(value = UPDATE_ACCOUNT, method = RequestMethod.PUT)
-	@ApiOperation(value = "修改账号", notes = "平台用户表接口管理")
+	@ApiOperation(value = "修改账号登录帐号", notes = "平台用户表接口管理")
 	public R<String> updateAccount(@RequestParam("account") @NotNull String account,
 								   @RequestParam("user-id") @NotNull String userId) {
 		if (!iBladeUserService.examineUserPhone(account)) {
@@ -186,6 +183,22 @@ public class BladeUserController {
 			return R.success(SAVE_OK);
 		}
 		return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
+	}
+
+	/**
+	 * 获取经理名称List
+	 *
+	 * @return list
+	 */
+	@RequestMapping(value = GET_MANAGER_LIST, method = RequestMethod.GET)
+	@ApiOperation(value = "获取经理名称List", notes = "平台用户表接口管理")
+	public R<List<ManagerNameVO>> getManagerNameList() {
+		List<BladeUserBash> list = iBladeUserBashService.list();
+		List<ManagerNameVO> result = new ArrayList<>();
+		if (list.size() > 0) {
+			list.forEach(item -> result.add(new ManagerNameVO().setManagerName(item.getUserName()).setManagerId(item.getId())));
+		}
+		return R.data(result);
 	}
 
 

@@ -14,7 +14,7 @@ server:
 #spring配置
 spring:
   profiles:
-    active: test
+    active: dev
   cache:
     ehcache:
       config: classpath:config/ehcache.xml

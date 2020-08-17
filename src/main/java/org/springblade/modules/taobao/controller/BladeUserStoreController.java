@@ -70,7 +70,7 @@ public class BladeUserStoreController {
 	 * @return 成功
 	 */
 	@RequestMapping(value = PUT_STORE_MANAGER, method = RequestMethod.PUT)
-	@ApiOperation(value = "修改负责人改body了 3参数", notes = "查看店铺信息")
+	@ApiOperation(value = "改负责人改body、实际为修改负责人及支付宝", notes = "查看店铺信息")
 	public R updateManager(@RequestBody UpdateManagerDTO updateManagerDTO) {
 		return R.data(iBladeUserStoreService.updateById(iBladeUserStoreService.getById(updateManagerDTO.getStoreId())
 			.setStoreHuman(updateManagerDTO.getStoreHuman()).setPayNumber(updateManagerDTO.getPayNumber())));

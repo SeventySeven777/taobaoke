@@ -53,6 +53,12 @@ public class BladeAdminAccount implements Serializable {
 	@ApiModelProperty(value = "分红金额总")
 	@TableField(value = "rate_money", fill = FieldFill.INSERT_UPDATE)
 	private BigDecimal rateMoney;
+	/**
+	 * 主页图片
+	 */
+	@ApiModelProperty(value = "主页图片")
+	@TableField(value = "home_image", fill = FieldFill.INSERT_UPDATE)
+	private String homeImage;
 
 
 }
