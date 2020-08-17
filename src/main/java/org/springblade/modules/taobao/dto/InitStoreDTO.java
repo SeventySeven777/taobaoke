@@ -57,5 +57,10 @@ public class InitStoreDTO {
 	 */
 	@ApiModelProperty(value = "经理ID",name = "managerId",required = true)
 	private String managerId;
+	/**
+	 * 支付宝ID
+	 */
+	@ApiModelProperty(value = "支付宝帐号",name = "payNumber",required = true)
+	private String payNumber;
 
 }

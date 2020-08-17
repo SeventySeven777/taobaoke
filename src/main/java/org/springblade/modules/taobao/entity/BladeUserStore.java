@@ -74,5 +74,11 @@ public class BladeUserStore implements Serializable {
 	@ApiModelProperty(value = "图片")
 	@TableField(value = "image", fill = FieldFill.INSERT_UPDATE)
 	private String image;
+	/**
+	 * 图片
+	 */
+	@ApiModelProperty(value = "支付宝帐号")
+	@TableField(value = "pay_number", fill = FieldFill.INSERT_UPDATE)
+	private String payNumber;
 
 }

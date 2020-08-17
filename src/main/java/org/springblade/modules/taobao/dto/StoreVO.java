@@ -41,4 +41,6 @@ public class StoreVO {
 	private String image;
 	@ApiModelProperty(value = "分红")
 	private BigDecimal rate;
+	@ApiModelProperty(value = "支付宝帐号")
+	private String payNumber;
 }

@@ -1,15 +1,10 @@
 package org.springblade.modules.taobao.controller;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
-import org.springblade.modules.taobao.dto.StoreAllVO;
-import org.springblade.modules.taobao.dto.StoreVO;
-import org.springblade.modules.taobao.entity.BladeStoreUserMiddle;
-import org.springblade.modules.taobao.entity.BladeUser;
+import org.springblade.modules.taobao.dto.UpdateManagerDTO;
 import org.springblade.modules.taobao.entity.BladeUserStore;
 import org.springblade.modules.taobao.service.*;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +12,9 @@ import io.swagger.annotations.Api;
 
 import javax.validation.constraints.NotNull;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springblade.modules.taobao.config.BashNumberInterface.STORE_NUMBER;
-import static org.springblade.modules.taobao.config.MethodConfig.NO_TIME;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
 /**
@@ -74,17 +66,15 @@ public class BladeUserStoreController {
 	/**
 	 * 修改负责人
 	 *
-	 * @param userId  1
-	 * @param storeId 1
+	 * @param updateManagerDTO 1
 	 * @return 成功
 	 */
 	@RequestMapping(value = PUT_STORE_MANAGER, method = RequestMethod.PUT)
-	@ApiOperation(value = "修改负责人", notes = "查看店铺信息")
-	public R updateManager(@RequestParam("store_human") @NotNull String userId,
-						   @RequestParam("store-id") @NotNull String storeId) {
-		return R.data(iBladeUserStoreService.updateById(iBladeUserStoreService.getById(storeId).setStoreHuman(userId)));
+	@ApiOperation(value = "修改负责人改body了 3参数", notes = "查看店铺信息")
+	public R updateManager(@RequestBody UpdateManagerDTO updateManagerDTO) {
+		return R.data(iBladeUserStoreService.updateById(iBladeUserStoreService.getById(updateManagerDTO.getStoreId())
+			.setStoreHuman(updateManagerDTO.getStoreHuman()).setPayNumber(updateManagerDTO.getPayNumber())));
 	}
-
 
 
 	/**
