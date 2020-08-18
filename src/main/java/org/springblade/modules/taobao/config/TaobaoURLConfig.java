@@ -74,4 +74,10 @@ public interface TaobaoURLConfig {
 	String ADD_ADMIN_MONEY = "/add_admin_money";
 	String ADMIN_INIT_WALLET = "/";
 	String GET_USER_MONEY_HISTORY = "/get-user-wallet-history";
+
+	/**
+	 * admin controller
+	 */
+	String SET_IMAGES = "/set-images";
+	String GET_IMAGES = "/get-images";
 }

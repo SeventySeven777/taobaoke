@@ -43,6 +43,8 @@ public class AuthInfo {
 	private String account;
 	@ApiModelProperty(value = "过期时间")
 	private long expiresIn;
+	@ApiModelProperty(value = "用户ID")
+	private String userId;
 	@ApiModelProperty(value = "许可证")
 	private String license = "powered by blade";
 }

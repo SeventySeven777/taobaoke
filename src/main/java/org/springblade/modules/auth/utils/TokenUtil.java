@@ -105,6 +105,7 @@ public class TokenUtil {
 		authInfo.setExpiresIn(accessToken.getExpire());
 		authInfo.setRefreshToken(createRefreshToken(bladeUser).getToken());
 		authInfo.setTokenType(TokenConstant.BEARER);
+		authInfo.setUserId(bladeUser.getId());
 		authInfo.setLicense(TokenConstant.LICENSE_NAME);
 
 		return authInfo;

@@ -55,7 +55,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	public R<AuthInfo> login(LoginUserDTO loginUserDTO) {
 		BladeUser bladeUser = bladeUserMapper.selectOne(Wrappers.<BladeUser>query().lambda()
 			.eq(BladeUser::getPhone, loginUserDTO.getPhone()));
-		if (null == bladeUser || bladeUser.getPassword().equals(loginUserDTO.getPassword())) {
+		if (null == bladeUser || !bladeUser.getPassword().equals(loginUserDTO.getPassword())) {
 			return R.fail(NO_USER_OR_PASSWORD_ERROR);
 		}
 

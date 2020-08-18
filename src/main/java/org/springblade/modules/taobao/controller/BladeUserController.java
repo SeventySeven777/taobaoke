@@ -2,6 +2,7 @@ package org.springblade.modules.taobao.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -47,7 +48,7 @@ public class BladeUserController {
 	 */
 	@RequestMapping(value = INIT_USER, method = RequestMethod.POST)
 	@ApiOperation(value = "经理注册", notes = "平台用户表接口管理")
-	public R<String> initUser(@RequestBody InitUserDTO initUserDTO) {
+	public R initUser(@RequestBody InitUserDTO initUserDTO) {
 		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
 			//判断手机号是否注册
 			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
@@ -59,7 +60,8 @@ public class BladeUserController {
 		if (!bladeUserR.isSuccess()) {
 			return R.fail(USER_INIT_ERROR);
 		}
-		return R.success(USER_INIT_OK);
+		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(SecureUtil.md5(initUserDTO.getPhone())));
+		//return R.success(USER_INIT_OK);
 	}
 
 	/**
