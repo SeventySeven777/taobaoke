@@ -44,6 +44,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	private final BladeWalletMapper bladeWalletMapper;
 	private final BladeUserStoreMapper bladeUserStoreMapper;
 	private final BladeUserCheckMapper bladeUserCheckMapper;
+	private final BladeAdminAccountMapper bladeAdminAccountMapper;
 
 	/**
 	 * 用户登录 用户登录返回用户信息+token 管理员登录返回token
@@ -58,7 +59,6 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		if (null == bladeUser || !bladeUser.getPassword().equals(loginUserDTO.getPassword())) {
 			return R.fail(NO_USER_OR_PASSWORD_ERROR);
 		}
-
 		return R.data(TokenUtil.createAuthInfo(bladeUser, bladeUserBashMapper.selectById(bladeUser.getId()).getUserName(),
 			bashNumberInterface.getUserRole(bladeUser.getRole())));
 
@@ -212,6 +212,15 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	public R<Page<BladeUser>> getManagerPage(Integer size, Integer current) {
 		return R.data(bladeUserMapper.selectPage(new Page<BladeUser>().setCurrent(current).setSize(size),
 			Wrappers.<BladeUser>query().lambda().eq(BladeUser::getRole, MANAGER_NUMBER).eq(BladeUser::getStatus, STATUS_OK_CHECK_NUMBER)));
+	}
+
+	@Override
+	public R<AuthInfo> loginAdmin(LoginUserDTO loginUserDTO) {
+		BladeAdminAccount bladeAdminAccount = bladeAdminAccountMapper.selectById(loginUserDTO.getPhone());
+		if (null == bladeAdminAccount || !bladeAdminAccount.getPassword().equals(loginUserDTO.getPassword())) {
+			return R.fail(NO_USER_OR_PASSWORD_ERROR);
+		}
+		return R.data(TokenUtil.createAuthInfo(bladeAdminAccount));
 	}
 
 	/**

@@ -119,4 +119,12 @@ public interface IBladeUserService extends IService<BladeUser> {
 	 * @return 分页DATA
 	 */
 	R<Page<BladeUser>> getManagerPage(Integer size, Integer current);
+
+	/**
+	 * 管理员登录
+	 *
+	 * @param loginUserDTO 登录DTO
+	 * @return token
+	 */
+	R<AuthInfo> loginAdmin(LoginUserDTO loginUserDTO);
 }

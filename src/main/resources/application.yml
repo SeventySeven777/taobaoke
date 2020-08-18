@@ -100,6 +100,7 @@ blade:
       - /blade-test/**
       #- /taobao/login/**
       - /taobao/**
+      - /tao-bao-login/**
     client:
       - client-id: sword
         path-patterns:

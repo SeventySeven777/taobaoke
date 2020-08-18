@@ -40,29 +40,29 @@ public class BladeUserController {
 	private final IBladeUserBashService iBladeUserBashService;
 	private final IBladeRateService iBladeRateService;
 
-	/**
-	 * 用户注册,如果手机号重复将不能注册
-	 *
-	 * @param initUserDTO 注册DTO
-	 * @return isOk
-	 */
-	@RequestMapping(value = INIT_USER, method = RequestMethod.POST)
-	@ApiOperation(value = "经理注册", notes = "平台用户表接口管理")
-	public R initUser(@RequestBody InitUserDTO initUserDTO) {
-		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
-			//判断手机号是否注册
-			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
-		}
-		BladeUserBash bladeUserBash = new BladeUserBash();
-		BeanUtil.copyProperties(initUserDTO, bladeUserBash);
-		R<BladeUser> bladeUserR = iBladeUserService.initUserAll(bladeUserBash);
-		//初始user完成
-		if (!bladeUserR.isSuccess()) {
-			return R.fail(USER_INIT_ERROR);
-		}
-		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(SecureUtil.md5(initUserDTO.getPhone())));
-		//return R.success(USER_INIT_OK);
-	}
+//	/**
+//	 * 用户注册,如果手机号重复将不能注册
+//	 *
+//	 * @param initUserDTO 注册DTO
+//	 * @return isOk
+//	 */
+//	@RequestMapping(value = INIT_USER, method = RequestMethod.POST)
+//	@ApiOperation(value = "经理注册", notes = "平台用户表接口管理")
+//	public R initUser(@RequestBody InitUserDTO initUserDTO) {
+//		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
+//			//判断手机号是否注册
+//			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
+//		}
+//		BladeUserBash bladeUserBash = new BladeUserBash();
+//		BeanUtil.copyProperties(initUserDTO, bladeUserBash);
+//		R<BladeUser> bladeUserR = iBladeUserService.initUserAll(bladeUserBash);
+//		//初始user完成
+//		if (!bladeUserR.isSuccess()) {
+//			return R.fail(USER_INIT_ERROR);
+//		}
+//		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(SecureUtil.md5(initUserDTO.getPhone())));
+//		//return R.success(USER_INIT_OK);
+//	}
 
 	/**
 	 * 创建店铺 手机号重复 经理ID无人则不能注册

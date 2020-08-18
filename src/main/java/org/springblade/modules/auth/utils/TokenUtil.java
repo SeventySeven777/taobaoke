@@ -22,10 +22,14 @@ import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.modules.system.entity.User;
 import org.springblade.modules.system.entity.UserInfo;
+import org.springblade.modules.taobao.entity.BladeAdminAccount;
 import org.springblade.modules.taobao.entity.BladeUser;
+import org.springblade.modules.taobao.utils.SaveToken;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springblade.modules.taobao.config.BashNumberInterface.ADMIN_ID;
 
 /**
  * 认证工具类
@@ -107,7 +111,7 @@ public class TokenUtil {
 		authInfo.setTokenType(TokenConstant.BEARER);
 		authInfo.setUserId(bladeUser.getId());
 		authInfo.setLicense(TokenConstant.LICENSE_NAME);
-
+		SaveToken.addToken(accessToken.getToken());
 		return authInfo;
 	}
 
@@ -139,4 +143,23 @@ public class TokenUtil {
 		return SecureUtil.createJWT(param, "audience", "issuser", TokenConstant.REFRESH_TOKEN);
 	}
 
+	public static AuthInfo createAuthInfo(BladeAdminAccount bladeAdminAccount) {
+		//设置jwt参数
+		Map<String, String> param = new HashMap<>(16);
+		param.put(TokenConstant.TOKEN_TYPE, TokenConstant.ACCESS_TOKEN);
+		param.put(TokenConstant.USER_ID, Func.toStr(bladeAdminAccount.getId()));
+		param.put(TokenConstant.ACCOUNT, bladeAdminAccount.getAccount());
+		param.put(TokenConstant.USER_NAME, ADMIN_ID);
+		param.put(TokenConstant.ROLE_NAME, ADMIN_ID);
+
+		TokenInfo accessToken = SecureUtil.createJWT(param, "audience", "issuser", TokenConstant.ACCESS_TOKEN);
+		AuthInfo authInfo = new AuthInfo();
+		authInfo.setAccessToken(accessToken.getToken());
+		authInfo.setExpiresIn(accessToken.getExpire());
+		authInfo.setTokenType(TokenConstant.BEARER);
+		authInfo.setUserId(bladeAdminAccount.getId());
+		authInfo.setLicense(TokenConstant.LICENSE_NAME);
+		SaveToken.addToken(accessToken.getToken());
+		return authInfo;
+	}
 }

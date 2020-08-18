@@ -18,6 +18,7 @@ package org.springblade;
 import org.springblade.common.constant.LauncherConstant;
 import org.springblade.core.launch.BladeApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -26,6 +27,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author Chill
  */
 @EnableScheduling
+@ServletComponentScan
 @SpringBootApplication
 public class Application {
 

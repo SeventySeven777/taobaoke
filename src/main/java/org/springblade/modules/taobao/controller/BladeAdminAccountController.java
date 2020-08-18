@@ -33,11 +33,11 @@ public class BladeAdminAccountController {
 	 * @param uploadHomeImage 主页图片
 	 * @return ok
 	 */
-	@RequestMapping(value = SET_IMAGES, method = RequestMethod.GET)
+	@RequestMapping(value = SET_IMAGES, method = RequestMethod.POST)
 	@ApiOperation(value = "设置主页图片", notes = "平台帐号表接口管理")
-	public R<String> setHomeImage(@RequestBody UploadHomeImageDTO uploadHomeImage) {
+	public R<String> setHomeImageOne(@RequestBody UploadHomeImageDTO uploadHomeImage) {
 		BladeAdminAccount bladeAdminAccount = iBladeAdminAccountService.getById(ADMIN_ID);
-		bladeAdminAccount.setHomeImage(uploadHomeImage.getHomeImage());
+		bladeAdminAccount.setHomeImage(uploadHomeImage.getHomeImage().toString());
 		iBladeAdminAccountService.updateById(bladeAdminAccount);
 		return R.success(SAVE_OK);
 	}
