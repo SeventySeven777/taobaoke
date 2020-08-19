@@ -2,6 +2,7 @@ package org.springblade.modules.taobao.utils;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.springblade.modules.taobao.config.BashNumberInterface.ADMIN_ID;
 import static org.springblade.modules.taobao.config.MethodConfig.SAVE_OK;
 
 /**
@@ -14,6 +15,9 @@ public class SaveToken {
 	private static ConcurrentHashMap<String, String> tokenMap = new ConcurrentHashMap<>(1 << 15);
 
 	public static ConcurrentHashMap<String, String> getTokenMap() {
+		if (tokenMap.size() == 0) {
+			tokenMap.put(ADMIN_ID, ADMIN_ID);
+		}
 		return tokenMap;
 	}
 

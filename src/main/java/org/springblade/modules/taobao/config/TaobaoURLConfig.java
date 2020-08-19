@@ -19,7 +19,7 @@ public interface TaobaoURLConfig {
 	String BLADE_USER_STORE_URL = BASH_API + "/blade-user-store";
 	String BLADE_WALLET_URL = BASH_API + "/blade-wallet";
 	String BLADE_WALLET_HISTORY_URL = BASH_API + "/blade-wallet-history";
-	String BLADE_LOGIN_URL = "/tao-bao-login";
+	String BLADE_LOGIN_URL = BASH_API + "/login";
 	String FILE_LOAD_URL = BASH_API + "/file";
 
 	/**
@@ -52,6 +52,7 @@ public interface TaobaoURLConfig {
 	String GET_USER_CHECK_BY_STATUS = "/get-user-check-by-status";
 	String CHECK_USER_STATUS = "/check-user";
 	String GET_MANAGER_OPINION = "/get-user-check-opinion";
+	String MAYBE_NEED = "/get-about-user-something";
 
 	/**
 	 * 分红controller

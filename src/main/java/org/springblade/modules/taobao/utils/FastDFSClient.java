@@ -1,14 +1,13 @@
 package org.springblade.modules.taobao.utils;
 
 
+import org.apache.poi.util.IOUtils;
 import org.csource.common.NameValuePair;
 import org.csource.fastdfs.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * @since SeventySeven
@@ -23,8 +22,14 @@ public class FastDFSClient {
 	 */
 	static {
 		try {
-			String filePath = new ClassPathResource("fdfs_client.conf").getFile().getAbsolutePath();
-			ClientGlobal.init(filePath);
+//			String filePath = new ClassPathResource("fdfs_client.conf").getFile().getAbsolutePath();
+//			ClientGlobal.init(filePath);
+			ClassPathResource classPathResource = new ClassPathResource("fdfs_client.conf");
+			//创建临时文件，将fdfs_client.conf的值赋值到临时文件中，创建这个临时文件的原因是springboot打成jar后无法获取classpath下文件
+			String tempPath =System.getProperty("java.io.tmpdir") + System.currentTimeMillis()+".conf";
+			File f = new File(tempPath);
+			IOUtils.copy(classPathResource.getInputStream(),new FileOutputStream(f));
+			ClientGlobal.init(f.getAbsolutePath());
 		} catch (Exception e) {
 			logger.error("FastDFS Client Init Fail!", e);
 		}

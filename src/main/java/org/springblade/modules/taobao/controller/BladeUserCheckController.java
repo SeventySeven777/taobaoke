@@ -1,5 +1,6 @@
 package org.springblade.modules.taobao.controller;
 
+import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.CheckUserDTO;
 import org.springblade.modules.taobao.dto.CheckUserResultVO;
+import org.springblade.modules.taobao.dto.UserStatusVO;
 import org.springblade.modules.taobao.entity.BladeUserCheck;
 import org.springblade.modules.taobao.service.IBladeUserBashService;
 import org.springblade.modules.taobao.service.IBladeUserCheckService;
@@ -36,6 +38,12 @@ public class BladeUserCheckController {
 	private final IBladeUserBashService iBladeUserBashService;
 	private final IBladeUserCheckService iBladeUserCheckService;
 
+	@RequestMapping(value = MAYBE_NEED, method = RequestMethod.GET)
+	@ApiOperation(value = "也许用得上的接口,未写完勿调", notes = "审核意见表接口管理")
+	public R<UserStatusVO> maybeNeed(@RequestParam("user-id") String userId) {
+		return null;
+	}
+
 	/**
 	 * 获取用户审核状态
 	 *
@@ -47,10 +55,10 @@ public class BladeUserCheckController {
 	@RequestMapping(value = GET_USER_CHECK_BY_STATUS, method = RequestMethod.GET)
 	@ApiOperation(value = "获取用户审核(分页)", notes = "获取用户审核(分页)")
 	public R<Object> getUserCheckByStatus(@RequestParam("status") @NotNull Integer status,
-													 @RequestParam("size") @NotNull Integer size,
-													 @RequestParam("current") @NotNull Integer current) {
+										  @RequestParam("size") @NotNull Integer size,
+										  @RequestParam("current") @NotNull Integer current) {
 		List<String> userIds = iBladeUserService.getUserIdsByStatus(status, size, current, MANAGER_NUMBER);
-		return iBladeUserBashService.getUserByIds(userIds, size, current,MANAGER_NUMBER);
+		return iBladeUserBashService.getUserByIds(userIds, size, current, MANAGER_NUMBER);
 	}
 
 	/**
