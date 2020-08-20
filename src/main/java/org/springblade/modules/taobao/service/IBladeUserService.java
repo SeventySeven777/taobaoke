@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.core.secure.AuthInfo;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.taobao.dto.InitStoreDTO;
+import org.springblade.modules.taobao.dto.InitUserDTO;
 import org.springblade.modules.taobao.dto.LoginUserDTO;
 import org.springblade.modules.taobao.entity.BladeUser;
 import org.springblade.modules.taobao.entity.BladeUserBash;
@@ -92,6 +94,16 @@ public interface IBladeUserService extends IService<BladeUser> {
 	List<String> getUserIdsByStatus(Integer status, Integer size, Integer current, Integer managerNumber);
 
 	/**
+	 * @param status        状态
+	 * @param size          size
+	 * @param current       current
+	 * @param managerNumber 经理ID
+	 * @param filter        条件
+	 * @return ids
+	 */
+	List<String> getUserIdsByStatus(Integer status, Integer size, Integer current, Integer managerNumber, String filter);
+
+	/**
 	 * 修改用户 审核状态
 	 *
 	 * @param userId 用户ID
@@ -127,4 +139,20 @@ public interface IBladeUserService extends IService<BladeUser> {
 	 * @return token
 	 */
 	R<AuthInfo> loginAdmin(LoginUserDTO loginUserDTO);
+
+	/**
+	 * 解决乱码test01
+	 *
+	 * @param initStoreDTO code
+	 * @return decode
+	 */
+	BladeUserStore deCode(InitStoreDTO initStoreDTO);
+
+	/**
+	 * 解决乱码 test02
+	 *
+	 * @param initUserDTO code
+	 * @return decode
+	 */
+	BladeUserBash deCode(InitUserDTO initUserDTO);
 }

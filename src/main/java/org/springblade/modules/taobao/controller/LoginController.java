@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springblade.modules.taobao.config.BashNumberInterface.ADMIN_ID;
+import static org.springblade.modules.taobao.config.BashNumberInterface.MANAGER_NUMBER;
 import static org.springblade.modules.taobao.config.MethodConfig.*;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
@@ -80,8 +81,8 @@ public class LoginController {
 			//判断手机号是否注册
 			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
 		}
-		BladeUserBash bladeUserBash = new BladeUserBash();
-		BeanUtil.copyProperties(initUserDTO, bladeUserBash);
+		BladeUserBash bladeUserBash = iBladeUserService.deCode(initUserDTO);
+		//BeanUtil.copyProperties(initUserDTO, bladeUserBash);
 		R<BladeUser> bladeUserR = iBladeUserService.initUserAll(bladeUserBash);
 		//初始user完成
 		if (!bladeUserR.isSuccess()) {

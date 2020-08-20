@@ -61,7 +61,7 @@ public class BladeUserBashController {
 		managerPage.getData().getRecords().forEach(item -> {
 			ManagerVO managerVO = new ManagerVO().setUserId(item.getId()).setPassword(SecureUtil.sha1(item.getPassword()))
 				.setPhone(item.getPhone()).setRate(iBladeRateService.getManagerRate(item.getId()))
-				.setUserName(iBladeUserBashService.getById(item.getId()).getUserName())
+				.setUserName(iBladeUserBashService.getById(item.getId()).getUserName()).setCreateTime(item.getCreateDate().getTime())
 				.setStoreNumber(iBladeStoreUserMiddleService.getMiddleNumber(item.getId()));
 			list.add(managerVO);
 		});

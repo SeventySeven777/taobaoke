@@ -58,7 +58,7 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 	 * @return 分页后的用户基础信息
 	 */
 	@Override
-	public R<Object> getUserByIds(List<String> userIds, Integer size, Integer current,Integer role) {
+	public R<Object> getUserByIds(List<String> userIds, Integer size, Integer current, Integer role) {
 		//String stringTotal = userIds.get(userIds.size() - 1);
 		//删除total 本来想删除total的由于为空时list为空下方会报错于是留着total了反正不影响
 		return getUserInfoAll(userIds, size, current, role);
@@ -83,7 +83,8 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 			CheckUserResultVO checkUserResultVO = new CheckUserResultVO().setSize(size).setCurrent(current)
 				.setTotal(Long.valueOf(userIds.get(userIds.size() - 1))).setList(voList);
 			return R.data(checkUserResultVO);
-		} else{Long total = Long.valueOf(userIds.get(userIds.size() - 1));
+		} else {
+			Long total = Long.valueOf(userIds.get(userIds.size() - 1));
 			userIds.remove(userIds.size() - 1);
 			StoreAllVO storeAllVO = new StoreAllVO();
 			List<StoreVO> list = new ArrayList<>();
@@ -94,7 +95,7 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 				BigDecimal managerRate = iBladeRateService.getManagerRate(item);
 				StoreVO storeVO = new StoreVO();
 				BeanUtil.copyProperties(bladeUserStore, storeVO);
-				storeVO.setStoreId(bladeUserStore.getId());
+				storeVO.setStoreId(bladeUserStore.getId()).setCreateTime(bladeUser.getCreateDate().getTime());
 				storeVO.setManagerName(manageName).setAccount(bladeUser.getPhone()).setRate(managerRate);
 				list.add(storeVO);
 			});
@@ -113,7 +114,7 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 	@Override
 	public List<String> getUserIdBySomething(String what, Integer size, Integer current, Integer role, Integer status, List<String> ids) {
 		Page<BladeUserBash> bladeUserBashPage = bladeUserBashMapper.selectPage(new Page<BladeUserBash>().setCurrent(current).setSize(size),
-			Wrappers.<BladeUserBash>query().lambda().in(BladeUserBash::getId, ids).like(BladeUserBash::getPhone, what).or().like(BladeUserBash::getUserName, what));
+			Wrappers.<BladeUserBash>query().lambda().in(BladeUserBash::getId, ids).like(BladeUserBash::getPhone, "%"+what+"%").or().like(BladeUserBash::getUserName, "%"+what+"%"));
 		List<String> result = new ArrayList<>();
 		bladeUserBashPage.getRecords().forEach(item -> result.add(item.getId()));
 		result.add(String.valueOf(bladeUserBashPage.getTotal()));

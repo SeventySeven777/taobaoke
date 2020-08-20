@@ -45,7 +45,7 @@ public class InitUserDTO {
 	 * 工作年限
 	 */
 	@ApiModelProperty(value = "工作年限",name = "workYear",required = true)
-	private Integer workYear;
+	private String workYear;
 	/**
 	 * 简历URL
 	 */

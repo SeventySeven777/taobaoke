@@ -37,8 +37,6 @@ public class TokenFilter implements Filter {
 		HttpServletResponse rep = (HttpServletResponse) servletResponse;
 		String token = req.getHeader("token");
 		ConcurrentHashMap<String, String> tokenMap = SaveToken.getTokenMap();
-		boolean empty = StrUtil.isEmpty(token);
-		String s = tokenMap.get(token);
 		if (StrUtil.isEmpty(token) || null == tokenMap.get(token) || !SAVE_OK.equals(tokenMap.get(token))) {
 			rep.setStatus(401);
 			PrintWriter writer = null;

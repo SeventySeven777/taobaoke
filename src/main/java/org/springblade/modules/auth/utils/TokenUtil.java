@@ -109,10 +109,19 @@ public class TokenUtil {
 		authInfo.setExpiresIn(accessToken.getExpire());
 		authInfo.setRefreshToken(createRefreshToken(bladeUser).getToken());
 		authInfo.setTokenType(TokenConstant.BEARER);
+		authInfo.setStatus(bladeUser.getStatus().toString());
+		authInfo.setRoleId(bladeUser.getRole().toString());
 		authInfo.setUserId(bladeUser.getId());
 		authInfo.setLicense(TokenConstant.LICENSE_NAME);
+		authInfo.setPasswordIsInitPassword(isInitPassword(bladeUser));
 		SaveToken.addToken(accessToken.getToken());
+
 		return authInfo;
+	}
+
+	private static Integer isInitPassword(BladeUser bladeUser) {
+		return bladeUser.getPassword().equals(cn.hutool.crypto.SecureUtil.md5(bladeUser.getPhone())) ? 0 : 1;
+
 	}
 
 	/**

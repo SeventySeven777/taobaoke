@@ -43,4 +43,6 @@ public class StoreVO {
 	private BigDecimal rate;
 	@ApiModelProperty(value = "支付宝帐号")
 	private String payNumber;
+	@ApiModelProperty(value = "创建时间")
+	private Long createTime;
 }

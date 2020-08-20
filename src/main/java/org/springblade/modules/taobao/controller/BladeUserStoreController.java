@@ -57,8 +57,9 @@ public class BladeUserStoreController {
 	@ApiImplicitParam(name = "status", value = "状态码 1 已配置抽成,2 未配置抽成")
 	public R<Object> getStorePageByStatus(@RequestParam("size") @NotNull Integer size,
 										  @RequestParam("current") @NotNull Integer current,
-										  @RequestParam("status") @NotNull Integer status) {
-		List<String> userIdsByStatus = iBladeUserService.getUserIdsByStatus(status, size, current, STORE_NUMBER);
+										  @RequestParam("status") @NotNull Integer status,
+										  @RequestParam("filter")  String filter) {
+		List<String> userIdsByStatus = iBladeUserService.getUserIdsByStatus(status, size, current, STORE_NUMBER, filter);
 		//todo
 		return iBladeUserBashService.getUserByIds(userIdsByStatus, size, current, STORE_NUMBER);
 	}

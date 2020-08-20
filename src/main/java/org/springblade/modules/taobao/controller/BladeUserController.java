@@ -2,7 +2,6 @@ package org.springblade.modules.taobao.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springblade.modules.taobao.config.BashNumberInterface.STORE_NUMBER;
 import static org.springblade.modules.taobao.config.MethodConfig.*;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
@@ -40,30 +40,6 @@ public class BladeUserController {
 	private final IBladeUserBashService iBladeUserBashService;
 	private final IBladeRateService iBladeRateService;
 
-//	/**
-//	 * 用户注册,如果手机号重复将不能注册
-//	 *
-//	 * @param initUserDTO 注册DTO
-//	 * @return isOk
-//	 */
-//	@RequestMapping(value = INIT_USER, method = RequestMethod.POST)
-//	@ApiOperation(value = "经理注册", notes = "平台用户表接口管理")
-//	public R initUser(@RequestBody InitUserDTO initUserDTO) {
-//		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
-//			//判断手机号是否注册
-//			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
-//		}
-//		BladeUserBash bladeUserBash = new BladeUserBash();
-//		BeanUtil.copyProperties(initUserDTO, bladeUserBash);
-//		R<BladeUser> bladeUserR = iBladeUserService.initUserAll(bladeUserBash);
-//		//初始user完成
-//		if (!bladeUserR.isSuccess()) {
-//			return R.fail(USER_INIT_ERROR);
-//		}
-//		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(SecureUtil.md5(initUserDTO.getPhone())));
-//		//return R.success(USER_INIT_OK);
-//	}
-
 	/**
 	 * 创建店铺 手机号重复 经理ID无人则不能注册
 	 *
@@ -80,8 +56,8 @@ public class BladeUserController {
 			//判断手机号是否注册
 			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
 		}
-		BladeUserStore bladeUserStore = new BladeUserStore();
-		BeanUtil.copyProperties(initStoreDTO, bladeUserStore);
+		BladeUserStore bladeUserStore = iBladeUserService.deCode(initStoreDTO);
+		//BeanUtil.copyProperties(initStoreDTO, bladeUserStore);
 		//此时QRCode id 为空
 		R<BladeUserStore> bladeUserStoreR = iBladeUserService.initStore(bladeUserStore);
 		if (!bladeUserStoreR.isSuccess()) {
@@ -146,7 +122,7 @@ public class BladeUserController {
 		List<String> ids = new ArrayList<>();
 		list.forEach(item -> ids.add(item.getId()));
 		List<String> userIds;
-		if (!StrUtil.isBlank(what)) {
+		if (!StrUtil.isBlank(what) && ids.size() != 0) {
 			userIds = iBladeUserBashService.getUserIdBySomething(what, size, current, role, status, ids);
 			//获取到用户ids
 		} else {
@@ -202,6 +178,27 @@ public class BladeUserController {
 		}
 		return R.data(result);
 	}
-
-
 }
+//	/**
+//	 * 用户注册,如果手机号重复将不能注册
+//	 *
+//	 * @param initUserDTO 注册DTO
+//	 * @return isOk
+//	 */
+//	@RequestMapping(value = INIT_USER, method = RequestMethod.POST)
+//	@ApiOperation(value = "经理注册", notes = "平台用户表接口管理")
+//	public R initUser(@RequestBody InitUserDTO initUserDTO) {
+//		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
+//			//判断手机号是否注册
+//			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
+//		}
+//		BladeUserBash bladeUserBash = new BladeUserBash();
+//		BeanUtil.copyProperties(initUserDTO, bladeUserBash);
+//		R<BladeUser> bladeUserR = iBladeUserService.initUserAll(bladeUserBash);
+//		//初始user完成
+//		if (!bladeUserR.isSuccess()) {
+//			return R.fail(USER_INIT_ERROR);
+//		}
+//		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(SecureUtil.md5(initUserDTO.getPhone())));
+//		//return R.success(USER_INIT_OK);
+//	}

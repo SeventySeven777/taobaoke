@@ -24,8 +24,9 @@ public interface IBladeUserBashService extends IService<BladeUserBash> {
 	 * @param size    分页
 	 * @param current 分页
 	 * @return 分页后的用户基础信息
+	 *
 	 */
-	R<Object> getUserByIds(List<String> userIds, Integer size, Integer current,Integer role);
+	R<Object> getUserByIds(List<String> userIds, Integer size, Integer current, Integer role);
 
 	/**
 	 * 获取用户IDS

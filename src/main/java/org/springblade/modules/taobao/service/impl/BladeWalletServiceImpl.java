@@ -9,6 +9,7 @@ import org.springblade.modules.taobao.mapper.BladeWalletMapper;
 import org.springblade.modules.taobao.service.IBladeWalletHistoryService;
 import org.springblade.modules.taobao.service.IBladeWalletService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -29,6 +30,7 @@ public class BladeWalletServiceImpl extends ServiceImpl<BladeWalletMapper, Blade
 	private final IBladeWalletHistoryService iBladeWalletHistoryService;
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public R<String> addMoney(BladeWallet userBladeWallet, BigDecimal moneyChange, Integer reason) {
 		userBladeWallet.setMoney(userBladeWallet.getMoney().add(moneyChange));
 		userBladeWallet.setHistoryMoneyAll(userBladeWallet.getHistoryMoneyAll().add(moneyChange));
@@ -39,6 +41,7 @@ public class BladeWalletServiceImpl extends ServiceImpl<BladeWalletMapper, Blade
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public R<String> subMoney(BladeWallet userBladeWallet, BigDecimal moneyChange, Integer reason) {
 		if (userBladeWallet.getMoney().subtract(moneyChange.abs()).compareTo(BigDecimal.ZERO) < 0) {
 			return R.fail(MONEY_ERROR);

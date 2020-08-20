@@ -10,6 +10,12 @@ server:
     buffer-size: 1024
     # 是否分配的直接内存
     direct-buffers: true
+#  ssl:
+#    key-store: classpath:4379233_tbk-api.wzswznkj.com.pfx   #证书pfx的名字
+#    key-store-type: PKCS12                               #证书的类型
+#    key-store-password: k5oemd7H                         #pfx-password.txt中的密码
+
+
 
 #spring配置
 spring:

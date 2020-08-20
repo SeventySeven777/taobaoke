@@ -47,4 +47,12 @@ public class AuthInfo {
 	private String userId;
 	@ApiModelProperty(value = "许可证")
 	private String license = "powered by blade";
+	@ApiModelProperty(value = "角色ID 一起返给你呢看是谁登录")
+	private String roleId;
+	@ApiModelProperty(value = "审核状态名字")
+	private String statusName;
+	@ApiModelProperty(value = "审核状态码")
+	private String status;
+	@ApiModelProperty(value = "是不是初始密码 0 初始密码 1 不是")
+	private Integer passwordIsInitPassword;
 }

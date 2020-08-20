@@ -33,6 +33,7 @@ public interface MethodConfig {
 	String NO_USER_OR_PASSWORD_ERROR = "用户名或密码错误";
 	String NO_TIME = "NULL";
 	String LOGIN_PLEASE = "please login";
+	String DECODE_ERROR = "解码失败";
 
 
 }

@@ -12,10 +12,13 @@ import org.springblade.core.tool.api.R;
 import org.springblade.modules.auth.utils.TokenUtil;
 import org.springblade.modules.exception.SqlException;
 import org.springblade.modules.taobao.config.BashNumberInterface;
+import org.springblade.modules.taobao.dto.InitStoreDTO;
+import org.springblade.modules.taobao.dto.InitUserDTO;
 import org.springblade.modules.taobao.dto.LoginUserDTO;
 import org.springblade.modules.taobao.entity.*;
 import org.springblade.modules.taobao.mapper.*;
 import org.springblade.modules.taobao.service.IBladeUserService;
+import org.springblade.modules.taobao.utils.DoDecodeAliPayCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -182,6 +185,29 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		return result;
 	}
 
+	@Override
+	public List<String> getUserIdsByStatus(Integer status, Integer size, Integer current, Integer managerNumber, String filter) {
+		Page<BladeUser> bladeUserPageOne = bladeUserMapper.selectPage(new Page<BladeUser>().setSize(size).setCurrent(current),
+			Wrappers.<BladeUser>query().lambda().eq(BladeUser::getStatus, status).eq(BladeUser::getRole, managerNumber)
+				.like(BladeUser::getPhone, "%" + filter + "%").orderByDesc(BladeUser::getCreateDate));
+		List<String> result = new ArrayList<>();
+		if (null == bladeUserPageOne.getRecords() || bladeUserPageOne.getRecords().size() == 0) {
+			List<String> ids = new ArrayList<>();
+			Page<BladeUserStore> bladeUserStorePage = bladeUserStoreMapper.selectPage(new Page<BladeUserStore>().setSize(size).setCurrent(current),
+				Wrappers.<BladeUserStore>query().lambda().like(BladeUserStore::getStoreHuman, "%" + filter + "%"));
+			bladeUserStorePage.getRecords().forEach(item -> ids.add(item.getId()));
+			if (ids.size() != 0) {
+				bladeUserPageOne = bladeUserMapper.selectPage(new Page<BladeUser>().setSize(size).setCurrent(current),
+					Wrappers.<BladeUser>query().lambda().eq(BladeUser::getStatus, status).eq(BladeUser::getRole, managerNumber)
+						.in(BladeUser::getId, ids).orderByDesc(BladeUser::getCreateDate));
+			}
+		}
+		//为了方便将total装入List最后一位 拿到后进行删除即可
+		bladeUserPageOne.getRecords().forEach(item -> result.add(item.getId()));
+		result.add(String.valueOf(bladeUserPageOne.getTotal()));
+		return result;
+	}
+
 	/**
 	 * 修改用户审核状态
 	 *
@@ -221,6 +247,38 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 			return R.fail(NO_USER_OR_PASSWORD_ERROR);
 		}
 		return R.data(TokenUtil.createAuthInfo(bladeAdminAccount));
+	}
+
+	@Override
+	public BladeUserStore deCode(InitStoreDTO initStoreDTO) {
+		BladeUserStore bladeUserStore = new BladeUserStore().setStoreName(DoDecodeAliPayCode.deCode(initStoreDTO.getStoreName()))
+			.setPhone(DoDecodeAliPayCode.deCode(initStoreDTO.getPhone()))
+			.setPayNumber(DoDecodeAliPayCode.deCode(initStoreDTO.getPayNumber()))
+			.setLongitude(DoDecodeAliPayCode.deCode(initStoreDTO.getLongitude()))
+			.setLatitude(DoDecodeAliPayCode.deCode(initStoreDTO.getLatitude()))
+			.setStoreHuman(DoDecodeAliPayCode.deCode(initStoreDTO.getStoreHuman()))
+			.setAddress(DoDecodeAliPayCode.deCode(initStoreDTO.getAddress()))
+			.setImage(DoDecodeAliPayCode.deCode(initStoreDTO.getImage()));
+		return bladeUserStore;
+	}
+
+	@Override
+	public BladeUserBash deCode(InitUserDTO initUserDTO) {
+		BladeUserBash bladeUserBash = new BladeUserBash().setAddress(DoDecodeAliPayCode.deCode(initUserDTO.getAddress()))
+			.setAlipay(DoDecodeAliPayCode.deCode(initUserDTO.getAlipay()))
+			.setEducation(DoDecodeAliPayCode.deCode(initUserDTO.getEducation()))
+			.setEducationImage(DoDecodeAliPayCode.deCode(initUserDTO.getEducationImage()))
+			.setPhone(DoDecodeAliPayCode.deCode(initUserDTO.getPhone()))
+			.setIdentityImageFront(DoDecodeAliPayCode.deCode(initUserDTO.getIdentityImageFront()))
+			.setIdentityImageVerso(DoDecodeAliPayCode.deCode(initUserDTO.getIdentityImageVerso()))
+			.setIndividualResume(DoDecodeAliPayCode.deCode(initUserDTO.getIndividualResume()))
+			.setResumeUrl(DoDecodeAliPayCode.deCode(initUserDTO.getResumeUrl()))
+			.setSchool(DoDecodeAliPayCode.deCode(initUserDTO.getSchool()))
+			.setUserAge(initUserDTO.getUserAge())
+			.setUserName(DoDecodeAliPayCode.deCode(initUserDTO.getUserName()))
+			.setUserSex(initUserDTO.getUserSex())
+			.setWorkYear(DoDecodeAliPayCode.deCode(initUserDTO.getWorkYear()));
+		return bladeUserBash;
 	}
 
 	/**

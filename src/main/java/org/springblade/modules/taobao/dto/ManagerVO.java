@@ -31,4 +31,6 @@ public class ManagerVO {
 	private Integer storeNumber;
 	@ApiModelProperty(value = "密码")
 	private String password;
+	@ApiModelProperty(value = "创建时间")
+	private Long createTime;
 }

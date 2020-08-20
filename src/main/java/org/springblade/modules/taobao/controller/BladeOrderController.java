@@ -16,7 +16,9 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.BLADE_ORDER_
 @RestController
 @RequestMapping(BLADE_ORDER_URL)
 public class BladeOrderController {
-
+	/**
+	 * @return
+	 */
 	public R<BladeOrder> getBladeOrderList() {
 		return null;
 	}
