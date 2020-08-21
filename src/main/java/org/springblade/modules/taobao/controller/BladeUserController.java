@@ -1,6 +1,5 @@
 package org.springblade.modules.taobao.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.ApiImplicitParam;
@@ -57,8 +56,6 @@ public class BladeUserController {
 			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
 		}
 		BladeUserStore bladeUserStore = iBladeUserService.deCode(initStoreDTO);
-		//BeanUtil.copyProperties(initStoreDTO, bladeUserStore);
-		//此时QRCode id 为空
 		R<BladeUserStore> bladeUserStoreR = iBladeUserService.initStore(bladeUserStore);
 		if (!bladeUserStoreR.isSuccess()) {
 			return R.fail(STORE_INIT_ERROR);

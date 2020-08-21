@@ -1,6 +1,5 @@
 package org.springblade.modules.taobao.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.crypto.SecureUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springblade.modules.taobao.config.BashNumberInterface.ADMIN_ID;
-import static org.springblade.modules.taobao.config.BashNumberInterface.MANAGER_NUMBER;
 import static org.springblade.modules.taobao.config.MethodConfig.*;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
@@ -76,20 +74,18 @@ public class LoginController {
 	 */
 	@RequestMapping(value = INIT_USER, method = RequestMethod.POST)
 	@ApiOperation(value = "经理注册", notes = "登录")
-	public R initUser(@RequestBody InitUserDTO initUserDTO) {
+	public R<AuthInfo> initUser(@RequestBody InitUserDTO initUserDTO) {
 		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
 			//判断手机号是否注册
 			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
 		}
 		BladeUserBash bladeUserBash = iBladeUserService.deCode(initUserDTO);
-		//BeanUtil.copyProperties(initUserDTO, bladeUserBash);
 		R<BladeUser> bladeUserR = iBladeUserService.initUserAll(bladeUserBash);
 		//初始user完成
 		if (!bladeUserR.isSuccess()) {
 			return R.fail(USER_INIT_ERROR);
 		}
 		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(SecureUtil.md5(initUserDTO.getPhone())));
-		//return R.success(USER_INIT_OK);
 	}
 
 	/**
@@ -102,6 +98,4 @@ public class LoginController {
 	public R<String> getHomeImage() {
 		return R.data(iBladeAdminAccountService.getById(ADMIN_ID).getHomeImage());
 	}
-
-
 }

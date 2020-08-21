@@ -28,8 +28,6 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 public class BladeUserStoreController {
 	private final IBladeUserStoreService iBladeUserStoreService;
 	private final IBladeUserService iBladeUserService;
-	private final IBladeStoreUserMiddleService iBladeStoreUserMiddleService;
-	private final IBladeRateService iBladeRateService;
 	private final IBladeUserBashService iBladeUserBashService;
 
 	/**
@@ -89,5 +87,7 @@ public class BladeUserStoreController {
 	public R<String> deleteStore(@RequestParam("store-id") @NotNull String storeId) {
 		return iBladeUserStoreService.deleteStore(storeId);
 	}
+
+
 
 }

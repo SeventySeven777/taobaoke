@@ -26,6 +26,7 @@ public interface BashNumberInterface {
 	String ORDER_NO = "还未过期订单";
 	String REASON_ADD = "提成";
 	String REASON_SUB = "提现";
+	Integer ZERO_NUMBER = 0;
 
 
 	Integer ADMIN_NUMBER = -1;

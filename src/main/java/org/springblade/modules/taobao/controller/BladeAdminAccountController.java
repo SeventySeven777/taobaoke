@@ -25,7 +25,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RequestMapping(BLADE_ADMIN_ACCOUNT_URL)
 @AllArgsConstructor
 public class BladeAdminAccountController {
-	private IBladeAdminAccountService iBladeAdminAccountService;
+	private final IBladeAdminAccountService iBladeAdminAccountService;
 
 	/**
 	 * 设置主页图片

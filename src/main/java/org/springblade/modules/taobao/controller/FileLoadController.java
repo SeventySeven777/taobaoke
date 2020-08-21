@@ -34,7 +34,7 @@ public class FileLoadController {
 	 * 场景:上传任何文件
 	 * 文件返回的是下载地址 图片会被浏览器解析成直接显示
 	 *
-	 * @param file
+	 * @param file 1
 	 * @return 返回的为储存地址URL : IP+GROUP+file路径
 	 */
 	@PostMapping("")
@@ -69,8 +69,8 @@ public class FileLoadController {
 	 * groupName 为URL 第一段
 	 * fileName 需要去掉最前面的/
 	 *
-	 * @param fileName
-	 * @return
+	 * @param fileName 1
+	 * @return 1
 	 */
 	@GetMapping("/downLoad")
 	@ApiOperation(value = "下载图片使用", tags = "下载图片使用")
@@ -101,8 +101,8 @@ public class FileLoadController {
 	 * 解析URL
 	 * 看起来参数简单点
 	 *
-	 * @param url
-	 * @return
+	 * @param url 1
+	 * @return 1
 	 */
 	private List<String> getFileName(String url) {
 		String[] split = url.split("/");

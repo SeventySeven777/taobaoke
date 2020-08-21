@@ -281,6 +281,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		return bladeUserBash;
 	}
 
+
 	/**
 	 * initUser
 	 *

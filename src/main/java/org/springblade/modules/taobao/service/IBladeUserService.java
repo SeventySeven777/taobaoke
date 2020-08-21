@@ -155,4 +155,5 @@ public interface IBladeUserService extends IService<BladeUser> {
 	 * @return decode
 	 */
 	BladeUserBash deCode(InitUserDTO initUserDTO);
+
 }

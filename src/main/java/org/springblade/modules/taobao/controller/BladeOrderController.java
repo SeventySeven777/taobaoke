@@ -11,8 +11,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.BladeOrderPageVO;
+import org.springblade.modules.taobao.dto.BladeStoreRatePageVO;
 import org.springblade.modules.taobao.entity.BladeOrder;
 import org.springblade.modules.taobao.service.IBladeOrderService;
+import org.springblade.modules.taobao.service.IBladeUserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.springblade.modules.taobao.config.BashNumberInterface.ZERO_NUMBER;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
 /**
@@ -35,6 +38,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @AllArgsConstructor
 public class BladeOrderController {
 	private final IBladeOrderService iBladeOrderService;
+	private final IBladeUserService iBladeUserService;
 
 
 	/**
@@ -57,16 +61,21 @@ public class BladeOrderController {
 	public R<BladeOrderPageVO> getBladeOrderList(@RequestParam("status") Integer status,
 												 @RequestParam("size") Integer size,
 												 @RequestParam("current") Integer current,
+												 @RequestParam(value = "store_id", defaultValue = "", required = false) String storeId,
 												 @RequestParam(value = "order_id", defaultValue = "", required = false) String orderId,
 												 @RequestParam(value = "filter", defaultValue = "", required = false) String filter) {
-		LambdaQueryWrapper<BladeOrder> wrappers = Wrappers.<BladeOrder>query().lambda().eq(BladeOrder::getStatus, status);
+		LambdaQueryWrapper<BladeOrder> wrappers = Wrappers.<BladeOrder>query().lambda().eq(BladeOrder::getStatus, status).orderByDesc(BladeOrder::getCreateTime);
 		if (!StrUtil.isEmpty(orderId)) {
-			wrappers = Wrappers.<BladeOrder>query().lambda().eq(BladeOrder::getOrderAliId, orderId).eq(BladeOrder::getStatus, status);
+			wrappers = Wrappers.<BladeOrder>query().lambda().eq(BladeOrder::getOrderAliId, orderId)
+				.eq(BladeOrder::getStatus, status).orderByDesc(BladeOrder::getCreateTime);
 		}
-		if (!StrUtil.isEmpty(filter)) {
+		if (!StrUtil.isEmpty(filter) && !StrUtil.isEmpty(storeId)) {
 			wrappers = Wrappers.<BladeOrder>query().lambda().between(BladeOrder::getCreateTime,
 				DateUtil.beginOfMonth(new Date(Long.valueOf(filter))),
-				DateUtil.endOfMonth(new Date(Long.valueOf(filter))));
+				DateUtil.endOfMonth(new Date(Long.valueOf(filter)))).orderByDesc(BladeOrder::getCreateTime);
+		}
+		if (!StrUtil.isEmpty(storeId) && StrUtil.isEmpty(filter)) {
+			wrappers = Wrappers.<BladeOrder>query().lambda().eq(BladeOrder::getStoreId, storeId).orderByDesc(BladeOrder::getCreateTime);
 		}
 		List<String> list = new ArrayList<>();
 		Page<BladeOrder> page = iBladeOrderService.page(new Page<BladeOrder>().setCurrent(current).setSize(size), wrappers);
@@ -74,4 +83,15 @@ public class BladeOrderController {
 		return iBladeOrderService.getOrderPageInfo(list, size, current, page.getTotal());
 	}
 
+	@RequestMapping(value = GET_STORE_PAGE_RATE, method = RequestMethod.GET)
+	@ApiOperation(value = "小程序使用获取STORE列表(没分页别传了)", notes = "订单表接口管理")
+	public R<BladeStoreRatePageVO> getStoreList(@RequestParam(value = "manager-id", defaultValue = "", required = true) String managerId) {
+
+		return null;
+	}
+
+	/**
+	 * @RequestParam(value = "size", defaultValue = "0", required = false) Integer size,
+	 * @RequestParam(value = "current", defaultValue = "0", required = false) Integer current,
+	 */
 }

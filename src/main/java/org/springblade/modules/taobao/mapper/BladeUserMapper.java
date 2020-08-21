@@ -1,6 +1,7 @@
 package org.springblade.modules.taobao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 import org.springblade.modules.taobao.entity.BladeUser;
 
 /**

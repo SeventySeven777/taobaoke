@@ -86,4 +86,5 @@ public interface TaobaoURLConfig {
 	 * order controller
 	 */
 	String GET_ORDER_PAGE_INFO = "/get-order-info";
+	String GET_STORE_PAGE_RATE = "/get-store-rate-page";
 }
