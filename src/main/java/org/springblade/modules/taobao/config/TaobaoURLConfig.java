@@ -81,4 +81,9 @@ public interface TaobaoURLConfig {
 	 */
 	String SET_IMAGES = "/set-images";
 	String GET_IMAGES = "/get-images";
+
+	/**
+	 * order controller
+	 */
+	String GET_ORDER_PAGE_INFO = "/get-order-info";
 }

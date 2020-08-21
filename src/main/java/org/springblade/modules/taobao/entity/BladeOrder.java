@@ -90,7 +90,7 @@ public class BladeOrder implements Serializable {
 	 */
 	@ApiModelProperty(value = "是否过期可提现")
 	@TableField(value = "past_time", fill = FieldFill.INSERT_UPDATE)
-	private Date pastTime;
+	private Long pastTime;
 
 	/**
 	 * 订单状态

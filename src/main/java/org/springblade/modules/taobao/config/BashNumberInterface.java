@@ -22,6 +22,10 @@ public interface BashNumberInterface {
 	String NUMBER_ONE = "1";
 	String NO_MANAGER = "暂无区域经理";
 	String ADMIN_ID = "admin";
+	String ORDER_OK = "已过期订单";
+	String ORDER_NO = "还未过期订单";
+	String REASON_ADD = "提成";
+	String REASON_SUB = "提现";
 
 
 	Integer ADMIN_NUMBER = -1;
@@ -37,7 +41,12 @@ public interface BashNumberInterface {
 	Integer MONEY_STATUS_OK = 1;
 	Integer WITHDRAW = 10;
 	Integer ADMIN_ADD_MONEY = -1;
-
+	Integer ORDER_OK_NUMBER = 1;
+	Integer ORDER_NO_NUMBER = 0;
+	Integer ONE_DAY = 1000 * 60 * 60 * 24;
+	Integer FOURTEEN_DAY = ONE_DAY * 14;
+	Integer REASON_ADD_NUMBER = 0;
+	Integer REASON_SUB_NUMBER = 1;
 
 	/**
 	 * 接受角色数字返回实际角色String
