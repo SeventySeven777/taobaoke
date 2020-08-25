@@ -3,6 +3,8 @@ package org.springblade.modules.taobao.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import org.springblade.core.tool.api.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -26,6 +28,8 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @WebFilter(urlPatterns = {BLADE_ORDER_URL + "/*", BLADE_WALLET_HISTORY_URL + "/*", BLADE_WALLET_URL + "/*", BLADE_USER_STORE_URL + "/*", BLADE_ORDER_URL + "/*",
 	BLADE_USER_URL + "/*", BLADE_USER_CHECK_URL + "/*", BLADE_USER_BASH_URL + "/*", BLADE_STORE_USER_MIDDLE_URL + "/*", BLADE_RATE_URL + "/*", BLADE_ORDER_URL + "/*"})
 public class TokenFilter implements Filter {
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -36,8 +40,8 @@ public class TokenFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
 		HttpServletResponse rep = (HttpServletResponse) servletResponse;
 		String token = req.getHeader("token");
-		ConcurrentHashMap<String, String> tokenMap = SaveToken.getTokenMap();
-		if (StrUtil.isEmpty(token) || null == tokenMap.get(token) || !SAVE_OK.equals(tokenMap.get(token))) {
+		String userId = new SaveToken(redisTemplate).getToken(token);
+		if (null == userId || StrUtil.isEmpty(userId)) {
 			rep.setStatus(401);
 			PrintWriter writer = null;
 			OutputStreamWriter osw = null;

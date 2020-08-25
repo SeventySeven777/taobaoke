@@ -13,6 +13,7 @@ import org.springblade.modules.taobao.entity.BladeUserBash;
 import org.springblade.modules.taobao.service.IBladeAdminAccountService;
 import org.springblade.modules.taobao.service.IBladeUserService;
 import org.springblade.modules.taobao.utils.CheckObjAllFieldsIsNullUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +36,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 public class LoginController {
 	private final IBladeUserService iBladeUserService;
 	private final IBladeAdminAccountService iBladeAdminAccountService;
+
 
 	/**
 	 * 用户登录 用户登录返回用户信息+token 管理员登录返回token

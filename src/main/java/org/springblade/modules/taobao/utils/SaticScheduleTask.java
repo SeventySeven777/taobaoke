@@ -20,11 +20,6 @@ public class SaticScheduleTask {
 	private IBladeOrderService iBladeOrderService;
 
 	@Scheduled(cron = "0 0 5 * * ? ")
-	private void configureTasks() {
-		SaveToken.deleteTokenMap();
-	}
-
-	@Scheduled(cron = "0 0 5 * * ? ")
 	private void cloneOrder() {
 		//todo 定时拉订单
 	}

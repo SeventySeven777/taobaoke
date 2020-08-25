@@ -1,6 +1,12 @@
 package org.springblade.modules.taobao.utils;
 
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import static org.springblade.modules.taobao.config.BashNumberInterface.ADMIN_ID;
 import static org.springblade.modules.taobao.config.MethodConfig.SAVE_OK;
@@ -11,21 +17,16 @@ import static org.springblade.modules.taobao.config.MethodConfig.SAVE_OK;
  * @author SeventySeven
  * @since 2020-08-18
  */
+@Component
+@AllArgsConstructor
 public class SaveToken {
-	private static ConcurrentHashMap<String, String> tokenMap = new ConcurrentHashMap<>(1 << 15);
+	private RedisTemplate<String, Object> redisTemplate;
 
-	public static ConcurrentHashMap<String, String> getTokenMap() {
-		if (tokenMap.size() == 0) {
-			tokenMap.put(ADMIN_ID, ADMIN_ID);
-		}
-		return tokenMap;
+	public String getToken(String token) {
+		return (String) redisTemplate.opsForValue().get(token);
 	}
 
-	public static void deleteTokenMap() {
-		tokenMap = new ConcurrentHashMap<>(1 << 15);
-	}
-
-	public static void addToken(String token) {
-		tokenMap.put(token, SAVE_OK);
+	public void addToken(String token, String userId) {
+		redisTemplate.opsForValue().set(token, userId, 30, TimeUnit.MINUTES);
 	}
 }

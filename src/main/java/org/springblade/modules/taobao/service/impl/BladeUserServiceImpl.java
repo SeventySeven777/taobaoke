@@ -19,6 +19,7 @@ import org.springblade.modules.taobao.entity.*;
 import org.springblade.modules.taobao.mapper.*;
 import org.springblade.modules.taobao.service.IBladeUserService;
 import org.springblade.modules.taobao.utils.DoDecodeAliPayCode;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.springblade.modules.taobao.config.BashNumberInterface.*;
 import static org.springblade.modules.taobao.config.MethodConfig.*;
@@ -48,6 +50,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	private final BladeUserStoreMapper bladeUserStoreMapper;
 	private final BladeUserCheckMapper bladeUserCheckMapper;
 	private final BladeAdminAccountMapper bladeAdminAccountMapper;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	/**
 	 * 用户登录 用户登录返回用户信息+token 管理员登录返回token
@@ -62,8 +65,10 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		if (null == bladeUser || !bladeUser.getPassword().equals(loginUserDTO.getPassword())) {
 			return R.fail(NO_USER_OR_PASSWORD_ERROR);
 		}
-		return R.data(TokenUtil.createAuthInfo(bladeUser, bladeUserBashMapper.selectById(bladeUser.getId()).getUserName(),
-			bashNumberInterface.getUserRole(bladeUser.getRole())));
+		AuthInfo authInfo = TokenUtil.createAuthInfo(bladeUser, bladeUserBashMapper.selectById(bladeUser.getId()).getUserName(),
+			bashNumberInterface.getUserRole(bladeUser.getRole()));
+		redisTemplate.opsForValue().set(authInfo.getAccessToken(), bladeUser.getId(), 30, TimeUnit.MINUTES);
+		return R.data(authInfo);
 
 	}
 
@@ -246,7 +251,9 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		if (null == bladeAdminAccount || !bladeAdminAccount.getPassword().equals(loginUserDTO.getPassword())) {
 			return R.fail(NO_USER_OR_PASSWORD_ERROR);
 		}
-		return R.data(TokenUtil.createAuthInfo(bladeAdminAccount));
+		AuthInfo authInfo = TokenUtil.createAuthInfo(bladeAdminAccount);
+		redisTemplate.opsForValue().set(authInfo.getAccessToken(), bladeAdminAccount.getId(), 30, TimeUnit.MINUTES);
+		return R.data(authInfo);
 	}
 
 	@Override

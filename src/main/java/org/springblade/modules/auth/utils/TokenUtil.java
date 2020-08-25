@@ -114,8 +114,6 @@ public class TokenUtil {
 		authInfo.setUserId(bladeUser.getId());
 		authInfo.setLicense(TokenConstant.LICENSE_NAME);
 		authInfo.setPasswordIsInitPassword(isInitPassword(bladeUser));
-		SaveToken.addToken(accessToken.getToken());
-
 		return authInfo;
 	}
 
@@ -168,7 +166,6 @@ public class TokenUtil {
 		authInfo.setTokenType(TokenConstant.BEARER);
 		authInfo.setUserId(bladeAdminAccount.getId());
 		authInfo.setLicense(TokenConstant.LICENSE_NAME);
-		SaveToken.addToken(accessToken.getToken());
 		return authInfo;
 	}
 }
