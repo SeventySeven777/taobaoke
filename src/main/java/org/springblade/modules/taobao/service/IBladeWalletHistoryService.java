@@ -37,4 +37,5 @@ public interface IBladeWalletHistoryService extends IService<BladeWalletHistory>
 	 */
 	R<String> subMoneyHistory(String userId, BigDecimal moneyChange, Integer reason, BigDecimal walletMoney);
 
+
 }

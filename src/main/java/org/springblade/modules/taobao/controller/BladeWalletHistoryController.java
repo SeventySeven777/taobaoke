@@ -45,4 +45,5 @@ public class BladeWalletHistoryController {
 		return R.data(iBladeWalletHistoryService.list(Wrappers.<BladeWalletHistory>query().lambda().eq(BladeWalletHistory::getUserId, userId)
 			.eq(BladeWalletHistory::getStatus, status)));
 	}
+
 }
