@@ -43,9 +43,9 @@ public class BladeTest {
 //		List<Map<String, BladeUser>> list2 = redisUtil.get("1");
 //		System.out.println(list2.get(0).get("one").getId());
 //		System.out.println(list2);
-		System.out.println(redisTemplate.hasKey("1234"));
-		System.out.println(redisTemplate.expire("123123", 12123, TimeUnit.DAYS));
-		System.out.println(redisTemplate.getExpire("12312sd", TimeUnit.SECONDS));
+//		System.out.println(redisTemplate.hasKey("1234"));
+//		System.out.println(redisTemplate.expire("123123", 12123, TimeUnit.DAYS));
+//		System.out.println(redisTemplate.getExpire("12312sd", TimeUnit.SECONDS));
 	}
 
 }

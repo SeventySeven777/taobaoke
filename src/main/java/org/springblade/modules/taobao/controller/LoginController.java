@@ -108,9 +108,6 @@ public class LoginController {
 	@RequestMapping(value = TO_CHECK_AGAIN, method = RequestMethod.POST)
 	@ApiOperation(value = "再次发起审核", notes = "登录")
 	public R<AuthInfo> toCheckAgain(@RequestBody InitUserDTO initUserDTO) {
-		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
-			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
-		}
 		BladeUserBash bladeUserBash = iBladeUserService.deCode(initUserDTO);
 		R<BladeUser> user = sessionService.getUser();
 		if (!user.isSuccess()) {
