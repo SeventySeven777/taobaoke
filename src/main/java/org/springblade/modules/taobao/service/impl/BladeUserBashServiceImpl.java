@@ -59,8 +59,6 @@ public class BladeUserBashServiceImpl extends ServiceImpl<BladeUserBashMapper, B
 	 */
 	@Override
 	public R<Object> getUserByIds(List<String> userIds, Integer size, Integer current, Integer role) {
-		//String stringTotal = userIds.get(userIds.size() - 1);
-		//删除total 本来想删除total的由于为空时list为空下方会报错于是留着total了反正不影响
 		return getUserInfoAll(userIds, size, current, role);
 	}
 

@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.springblade.modules.taobao.config.BashNumberInterface.ZERO_NUMBER;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
 /**
@@ -89,9 +88,4 @@ public class BladeOrderController {
 
 		return null;
 	}
-
-	/**
-	 * @RequestParam(value = "size", defaultValue = "0", required = false) Integer size,
-	 * @RequestParam(value = "current", defaultValue = "0", required = false) Integer current,
-	 */
 }

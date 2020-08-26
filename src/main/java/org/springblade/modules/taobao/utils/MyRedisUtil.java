@@ -110,6 +110,71 @@ public class MyRedisUtil {
 	}
 
 	/**
+	 * 添加普通String value 默认分钟
+	 *
+	 * @param key   redis key
+	 * @param value redis value
+	 * @param time  过期时间
+	 * @return true of false
+	 */
+	public Boolean set(String key, Object value, Long time) {
+		try {
+			redisTemplate.opsForValue().set(key, value, time, TimeUnit.MINUTES);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 添加普通String value
+	 *
+	 * @param key      redis key
+	 * @param value    redis value
+	 * @param time     过期时间
+	 * @param timeUnit 单位
+	 * @return true of false
+	 */
+	public Boolean set(String key, Object value, Long time, TimeUnit timeUnit) {
+		try {
+			redisTemplate.opsForValue().set(key, value, time, timeUnit);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 递增
+	 *
+	 * @param key   键
+	 * @param delta 要增加几
+	 */
+	public void incr(String key, Integer delta) {
+		try {
+			redisTemplate.opsForValue().increment(key, delta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 递增 默认+1
+	 *
+	 * @param key 键
+	 */
+	public void incr(String key) {
+		try {
+			redisTemplate.opsForValue().increment(key, 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	/**
 	 * 强转Object 防止代码检测 unchecked cast
 	 *
 	 * @param obj obj

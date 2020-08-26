@@ -19,6 +19,7 @@ import org.springblade.modules.taobao.entity.*;
 import org.springblade.modules.taobao.mapper.*;
 import org.springblade.modules.taobao.service.IBladeUserService;
 import org.springblade.modules.taobao.utils.DoDecodeAliPayCode;
+import org.springblade.modules.taobao.utils.MyRedisUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	private final BladeUserCheckMapper bladeUserCheckMapper;
 	private final BladeAdminAccountMapper bladeAdminAccountMapper;
 	private final RedisTemplate<String, Object> redisTemplate;
+	private final MyRedisUtil myRedisUtil;
 
 	/**
 	 * 用户登录 用户登录返回用户信息+token 管理员登录返回token
@@ -67,7 +69,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		}
 		AuthInfo authInfo = TokenUtil.createAuthInfo(bladeUser, bladeUserBashMapper.selectById(bladeUser.getId()).getUserName(),
 			bashNumberInterface.getUserRole(bladeUser.getRole()));
-		redisTemplate.opsForValue().set(authInfo.getAccessToken(), bladeUser.getId(), 30, TimeUnit.MINUTES);
+		myRedisUtil.set(REDIS_TOKEN + authInfo.getAccessToken(), bladeUser.getId(), 30L);
 		return R.data(authInfo);
 
 	}
@@ -103,6 +105,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		if (bladeUserBashMapper.insert(bladeUserBash) != 1) {
 			throw new SqlException(SAVE_ERROR);
 		}
+		myRedisUtil.set(REDIS_BASH + userId, bladeUserBash);
 		//initUserWallet
 		BladeWallet bladeWallet = new BladeWallet().setId(userId);
 		initUserWallet(bladeWallet, INIT_USER_MONEY);
@@ -130,14 +133,18 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 	 */
 	@Override
 	@Transactional(rollbackFor = SqlException.class)
-	public R<BladeUserStore> initStore(BladeUserStore bladeUserStore) {
+	public R<BladeUserStore> initStore(BladeUserStore bladeUserStore, String province) {
 		String userId = UUID.randomUUID().toString();
 		//initUser
 		BladeUser bladeUser = new BladeUser().setCreateDate(new Date()).setId(userId).setPassword(SecureUtil.md5(bladeUserStore.getPhone()))
 			.setPhone(bladeUserStore.getPhone());
 		initUser(bladeUser, STORE_NUMBER, STATUS_OK_CHECK_NO_RATE_NUMBER);
 		//initStore
-		bladeUserStore.setId(userId).setQRCode(INIT_QR_CODE);
+		//format = 0001
+		Integer o = myRedisUtil.get(REDIS_STORE_CODE);
+		String format = String.format("%05d", o);
+		bladeUserStore.setId(userId).setQRCode(INIT_QR_CODE).setStoreCode(province + format);
+		myRedisUtil.incr(REDIS_STORE_CODE);
 		if (bladeUserStoreMapper.insert(bladeUserStore) != 1) {
 			throw new SqlException(SAVE_ERROR);
 		}
@@ -252,13 +259,13 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 			return R.fail(NO_USER_OR_PASSWORD_ERROR);
 		}
 		AuthInfo authInfo = TokenUtil.createAuthInfo(bladeAdminAccount);
-		redisTemplate.opsForValue().set(authInfo.getAccessToken(), bladeAdminAccount.getId(), 30, TimeUnit.MINUTES);
+		myRedisUtil.set(REDIS_TOKEN + authInfo.getAccessToken(), bladeAdminAccount.getId(), 30L);
 		return R.data(authInfo);
 	}
 
 	@Override
 	public BladeUserStore deCode(InitStoreDTO initStoreDTO) {
-		BladeUserStore bladeUserStore = new BladeUserStore().setStoreName(DoDecodeAliPayCode.deCode(initStoreDTO.getStoreName()))
+		return new BladeUserStore().setStoreName(DoDecodeAliPayCode.deCode(initStoreDTO.getStoreName()))
 			.setPhone(DoDecodeAliPayCode.deCode(initStoreDTO.getPhone()))
 			.setPayNumber(DoDecodeAliPayCode.deCode(initStoreDTO.getPayNumber()))
 			.setLongitude(DoDecodeAliPayCode.deCode(initStoreDTO.getLongitude()))
@@ -266,12 +273,11 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 			.setStoreHuman(DoDecodeAliPayCode.deCode(initStoreDTO.getStoreHuman()))
 			.setAddress(DoDecodeAliPayCode.deCode(initStoreDTO.getAddress()))
 			.setImage(DoDecodeAliPayCode.deCode(initStoreDTO.getImage()));
-		return bladeUserStore;
 	}
 
 	@Override
 	public BladeUserBash deCode(InitUserDTO initUserDTO) {
-		BladeUserBash bladeUserBash = new BladeUserBash().setAddress(DoDecodeAliPayCode.deCode(initUserDTO.getAddress()))
+		return new BladeUserBash().setAddress(DoDecodeAliPayCode.deCode(initUserDTO.getAddress()))
 			.setAlipay(DoDecodeAliPayCode.deCode(initUserDTO.getAlipay()))
 			.setEducation(DoDecodeAliPayCode.deCode(initUserDTO.getEducation()))
 			.setEducationImage(DoDecodeAliPayCode.deCode(initUserDTO.getEducationImage()))
@@ -285,7 +291,6 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 			.setUserName(DoDecodeAliPayCode.deCode(initUserDTO.getUserName()))
 			.setUserSex(initUserDTO.getUserSex())
 			.setWorkYear(DoDecodeAliPayCode.deCode(initUserDTO.getWorkYear()));
-		return bladeUserBash;
 	}
 
 
@@ -301,6 +306,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		if (bladeUserMapper.insert(bladeUser) != 1) {
 			throw new SqlException(SAVE_ERROR);
 		}
+		myRedisUtil.set(REDIS_USER + bladeUser.getId(), bladeUser);
 	}
 
 	/**

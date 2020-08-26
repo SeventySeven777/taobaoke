@@ -34,13 +34,14 @@ public class Test {
 //		System.out.println(URLUtil.encode(s));
 //		System.out.println(DoDecodeAliPayCode.deCode(encode));
 //		System.out.println(new Date().getTime() - (new Date().getTime() + 1));
-		System.out.println(DateUtil.beginOfMonth(new Date()));
-		System.out.println(DateUtil.endOfMonth(new Date()));
-
-		String s = "";
-		String s1 ="1";
-		System.out.println(!StrUtil.isEmpty(s));
-		System.out.println(!StrUtil.isEmpty(s1));
+//		System.out.println(DateUtil.beginOfMonth(new Date()));
+//		System.out.println(DateUtil.endOfMonth(new Date()));
+//
+//		String s = "";
+//		String s1 ="1";
+//		System.out.println(!StrUtil.isEmpty(s));
+//		System.out.println(!StrUtil.isEmpty(s1));
+		System.out.println(String.format("%04d", 12));
 
 
 	}

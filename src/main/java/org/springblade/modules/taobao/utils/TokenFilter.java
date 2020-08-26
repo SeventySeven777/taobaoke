@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.springblade.modules.taobao.config.MethodConfig.LOGIN_PLEASE;
-import static org.springblade.modules.taobao.config.MethodConfig.SAVE_OK;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
 /**

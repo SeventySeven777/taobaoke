@@ -27,6 +27,11 @@ public interface BashNumberInterface {
 	String REASON_ADD = "提成";
 	String REASON_SUB = "提现";
 	Integer ZERO_NUMBER = 0;
+	String REDIS_STORE_CODE = "store::code";
+	String REDIS_USER = "user::user";
+	String REDIS_BASH = "user::bash";
+	String USER_STORE = "user::store";
+	String REDIS_TOKEN = "token::userToken";
 
 
 	Integer ADMIN_NUMBER = -1;

@@ -56,7 +56,7 @@ public class BladeUserStoreController {
 	public R<Object> getStorePageByStatus(@RequestParam("size") @NotNull Integer size,
 										  @RequestParam("current") @NotNull Integer current,
 										  @RequestParam("status") @NotNull Integer status,
-										  @RequestParam("filter")  String filter) {
+										  @RequestParam("filter") String filter) {
 		List<String> userIdsByStatus = iBladeUserService.getUserIdsByStatus(status, size, current, STORE_NUMBER, filter);
 		//todo
 		return iBladeUserBashService.getUserByIds(userIdsByStatus, size, current, STORE_NUMBER);
@@ -75,7 +75,6 @@ public class BladeUserStoreController {
 			.setStoreHuman(updateManagerDTO.getStoreHuman()).setPayNumber(updateManagerDTO.getPayNumber())));
 	}
 
-
 	/**
 	 * 删除门店
 	 *
@@ -87,7 +86,6 @@ public class BladeUserStoreController {
 	public R<String> deleteStore(@RequestParam("store-id") @NotNull String storeId) {
 		return iBladeUserStoreService.deleteStore(storeId);
 	}
-
 
 
 }

@@ -62,7 +62,7 @@ public interface IBladeUserService extends IService<BladeUser> {
 	 * @param bladeUserStore 店铺
 	 * @return 店铺
 	 */
-	R<BladeUserStore> initStore(BladeUserStore bladeUserStore);
+	R<BladeUserStore> initStore(BladeUserStore bladeUserStore,String province);
 
 	/**
 	 * 判断密码是否正确

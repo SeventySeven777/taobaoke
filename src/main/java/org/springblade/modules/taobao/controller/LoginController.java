@@ -10,16 +10,21 @@ import org.springblade.modules.taobao.dto.InitUserDTO;
 import org.springblade.modules.taobao.dto.LoginUserDTO;
 import org.springblade.modules.taobao.entity.BladeUser;
 import org.springblade.modules.taobao.entity.BladeUserBash;
-import org.springblade.modules.taobao.service.IBladeAdminAccountService;
-import org.springblade.modules.taobao.service.IBladeUserService;
+import org.springblade.modules.taobao.entity.BladeUserStore;
+import org.springblade.modules.taobao.service.*;
 import org.springblade.modules.taobao.utils.CheckObjAllFieldsIsNullUtils;
+import org.springblade.modules.taobao.utils.MyRedisUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springblade.modules.taobao.config.BashNumberInterface.ADMIN_ID;
+import javax.annotation.PostConstruct;
+
+import java.util.List;
+
+import static org.springblade.modules.taobao.config.BashNumberInterface.*;
 import static org.springblade.modules.taobao.config.MethodConfig.*;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
@@ -36,7 +41,10 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 public class LoginController {
 	private final IBladeUserService iBladeUserService;
 	private final IBladeAdminAccountService iBladeAdminAccountService;
-
+	private final MyRedisUtil myRedisUtil;
+	private final IBladeUserBashService iBladeUserBashService;
+	private final IBladeUserStoreService iBladeUserStoreService;
+	private final SessionService sessionService;
 
 	/**
 	 * 用户登录 用户登录返回用户信息+token 管理员登录返回token
@@ -98,6 +106,35 @@ public class LoginController {
 	@RequestMapping(value = GET_IMAGES, method = RequestMethod.GET)
 	@ApiOperation(value = "获取设置主页图片", notes = "登录")
 	public R<String> getHomeImage() {
+		System.out.println(sessionService.getUser());
 		return R.data(iBladeAdminAccountService.getById(ADMIN_ID).getHomeImage());
+	}
+
+	/**
+	 * 进行一点redis的加载
+	 * 暂定所有数据
+	 * 封装格式如下↓
+	 */
+	@PostConstruct
+	public void initRedis() {
+		//initStoreCodeNumber
+		if (null == myRedisUtil.get(REDIS_STORE_CODE)) {
+			myRedisUtil.set(REDIS_STORE_CODE, 0);
+		}
+		//initUser
+		List<BladeUser> userList = iBladeUserService.list();
+		userList.forEach(item -> {
+			myRedisUtil.set(REDIS_USER + item.getId(), item);
+		});
+		//initUserBash
+		List<BladeUserBash> bashList = iBladeUserBashService.list();
+		bashList.forEach(item -> {
+			myRedisUtil.set(REDIS_BASH + item.getId(), item);
+		});
+		//initStore
+		List<BladeUserStore> storeList = iBladeUserStoreService.list();
+		storeList.forEach(item -> {
+			myRedisUtil.set(USER_STORE + item.getId(), item);
+		});
 	}
 }

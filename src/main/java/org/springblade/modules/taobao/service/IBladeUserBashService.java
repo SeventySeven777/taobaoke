@@ -23,8 +23,8 @@ public interface IBladeUserBashService extends IService<BladeUserBash> {
 	 * @param userIds 用户IDs 最后一位为total
 	 * @param size    分页
 	 * @param current 分页
+	 * @param role    角色信息
 	 * @return 分页后的用户基础信息
-	 *
 	 */
 	R<Object> getUserByIds(List<String> userIds, Integer size, Integer current, Integer role);
 

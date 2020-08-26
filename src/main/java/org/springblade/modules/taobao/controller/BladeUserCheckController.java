@@ -1,14 +1,18 @@
 package org.springblade.modules.taobao.controller;
 
+import com.sun.org.apache.xpath.internal.objects.XNull;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.CheckUserDTO;
 import org.springblade.modules.taobao.dto.UserStatusVO;
+import org.springblade.modules.taobao.entity.BladeUser;
+import org.springblade.modules.taobao.entity.BladeUserBash;
 import org.springblade.modules.taobao.entity.BladeUserCheck;
 import org.springblade.modules.taobao.service.IBladeUserBashService;
 import org.springblade.modules.taobao.service.IBladeUserCheckService;
 import org.springblade.modules.taobao.service.IBladeUserService;
+import org.springblade.modules.taobao.utils.MyRedisUtil;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 
@@ -33,6 +37,7 @@ public class BladeUserCheckController {
 	private final IBladeUserService iBladeUserService;
 	private final IBladeUserBashService iBladeUserBashService;
 	private final IBladeUserCheckService iBladeUserCheckService;
+	private final MyRedisUtil myRedisUtil;
 
 	@RequestMapping(value = MAYBE_NEED, method = RequestMethod.GET)
 	@ApiOperation(value = "也许用得上的接口,未写完勿调", notes = "审核意见表接口管理")

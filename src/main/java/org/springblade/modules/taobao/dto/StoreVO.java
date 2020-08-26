@@ -45,4 +45,6 @@ public class StoreVO {
 	private String payNumber;
 	@ApiModelProperty(value = "创建时间")
 	private Long createTime;
+	@ApiModelProperty(value = "门店唯一码")
+	private String storeCode;
 }
