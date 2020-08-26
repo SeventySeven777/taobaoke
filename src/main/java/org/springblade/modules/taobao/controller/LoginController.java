@@ -1,5 +1,6 @@
 package org.springblade.modules.taobao.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.crypto.SecureUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -96,6 +97,30 @@ public class LoginController {
 			return R.fail(USER_INIT_ERROR);
 		}
 		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(SecureUtil.md5(initUserDTO.getPhone())));
+	}
+
+	/**
+	 * 再次发起审核
+	 *
+	 * @param initUserDTO 注册参数覆写
+	 * @return 登录token
+	 */
+	@RequestMapping(value = TO_CHECK_AGAIN, method = RequestMethod.POST)
+	@ApiOperation(value = "再次发起审核", notes = "登录")
+	public R<AuthInfo> toCheckAgain(@RequestBody InitUserDTO initUserDTO) {
+		if (iBladeUserService.examineUserPhone(initUserDTO.getPhone())) {
+			return R.fail(USER_PHONE_OR_ACCOUNT_REPETITION);
+		}
+		BladeUserBash bladeUserBash = iBladeUserService.deCode(initUserDTO);
+		R<BladeUser> user = sessionService.getUser();
+		if (!user.isSuccess()) {
+			return R.fail(LOGIN_PLEASE);
+		}
+		BladeUserBash bladeUserBashOld = myRedisUtil.get(REDIS_BASH + user.getData().getId());
+		BeanUtil.copyProperties(bladeUserBash, bladeUserBashOld);
+		iBladeUserBashService.updateById(bladeUserBashOld);
+		myRedisUtil.deleteAndSet(REDIS_BASH + user.getData().getId(), bladeUserBashOld);
+		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(user.getData().getPassword()));
 	}
 
 	/**

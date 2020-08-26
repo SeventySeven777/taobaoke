@@ -1,6 +1,7 @@
 package org.springblade.modules.taobao.utils;
 
 import lombok.AllArgsConstructor;
+import org.springblade.modules.taobao.entity.BladeUserBash;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -69,6 +70,11 @@ public class MyRedisUtil {
 			Collection<String> list = castObject(key);
 			redisTemplate.delete(list);
 		}
+	}
+
+	public void deleteAndSet(String key, Object object) {
+		del(key);
+		set(key, object);
 	}
 
 	/**
@@ -191,4 +197,6 @@ public class MyRedisUtil {
 		}
 		return result;
 	}
+
+
 }

@@ -93,5 +93,4 @@ public class BladeUserCheckController {
 	public R<String> getCheckOpinion(@RequestParam("user-id") @NotNull String userId) {
 		return iBladeUserCheckService.getUserCheckOpinion(userId);
 	}
-
 }
