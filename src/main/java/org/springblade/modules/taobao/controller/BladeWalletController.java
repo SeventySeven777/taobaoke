@@ -33,6 +33,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RestController
 @RequestMapping(BLADE_WALLET_URL)
 @AllArgsConstructor
+@CrossOrigin
 public class BladeWalletController {
 	private final IBladeWalletService iBladeWalletService;
 	private final IBladeUserService iBladeUserService;

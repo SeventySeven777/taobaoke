@@ -87,4 +87,5 @@ public class BladeUserStore implements Serializable {
 	@TableField(value = "store_code", fill = FieldFill.INSERT_UPDATE)
 	private String storeCode;
 
+
 }

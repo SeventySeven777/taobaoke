@@ -7,11 +7,8 @@ import org.springblade.modules.taobao.dto.UploadHomeImageDTO;
 import org.springblade.modules.taobao.entity.BladeAdminAccount;
 import org.springblade.modules.taobao.service.IBladeAdminAccountService;
 import org.springblade.modules.taobao.utils.DoDecodeAliPayCode;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import static org.springblade.modules.taobao.config.BashNumberInterface.ADMIN_ID;
 import static org.springblade.modules.taobao.config.MethodConfig.SAVE_OK;
@@ -25,6 +22,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RestController
 @RequestMapping(BLADE_ADMIN_ACCOUNT_URL)
 @AllArgsConstructor
+@CrossOrigin
 public class BladeAdminAccountController {
 	private final IBladeAdminAccountService iBladeAdminAccountService;
 

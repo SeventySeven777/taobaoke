@@ -44,6 +44,10 @@ public class TokenFilter implements Filter {
 		String userId = myRedisUtil.get(REDIS_TOKEN+token);
 		if (null == userId || StrUtil.isEmpty(userId)) {
 			rep.setStatus(401);
+			rep.setHeader("Access-Control-Allow-Origin", "*");
+			rep.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+			rep.setHeader("Access-Control-Max-Age", "3600");
+			rep.setHeader("Access-Control-Allow-Headers", "x-requested-with");
 			PrintWriter writer = null;
 			OutputStreamWriter osw = null;
 			osw = new OutputStreamWriter(rep.getOutputStream(),
@@ -57,6 +61,10 @@ public class TokenFilter implements Filter {
 			osw.close();
 			return;
 		}
+		rep.setHeader("Access-Control-Allow-Origin", "*");
+		rep.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		rep.setHeader("Access-Control-Max-Age", "3600");
+		rep.setHeader("Access-Control-Allow-Headers", "x-requested-with");
 		filterChain.doFilter(req, rep);
 	}
 

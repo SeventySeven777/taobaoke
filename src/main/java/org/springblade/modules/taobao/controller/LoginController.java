@@ -35,6 +35,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RequestMapping(BLADE_LOGIN_URL)
 @AllArgsConstructor
 @Api(value = "登录", tags = "登录")
+@CrossOrigin
 public class LoginController {
 	private final IBladeUserService iBladeUserService;
 	private final IBladeAdminAccountService iBladeAdminAccountService;
@@ -117,7 +118,9 @@ public class LoginController {
 		}
 		BladeUserBash bladeUserBashOld = myRedisUtil.get(REDIS_BASH + user.getData().getId());
 		BeanUtil.copyProperties(bladeUserBash, bladeUserBashOld);
+		bladeUserBashOld.setId(bladeUser.getId());
 		iBladeUserBashService.updateById(bladeUserBashOld);
+		iBladeUserService.updateById(bladeUser.setStatus(STATUS_NO_CHECK_NUMBER));
 		myRedisUtil.deleteAndSet(REDIS_BASH + user.getData().getId(), bladeUserBashOld);
 		return iBladeUserService.login(new LoginUserDTO().setPhone(initUserDTO.getPhone()).setPassword(user.getData().getPassword()));
 	}

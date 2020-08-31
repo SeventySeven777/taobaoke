@@ -22,6 +22,7 @@
 
         <spring.boot.version>2.2.7.RELEASE</spring.boot.version>
         <spring.platform.version>Cairo-SR8</spring.platform.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- 推荐使用Harbor -->
         <docker.registry.url>192.168.186.129</docker.registry.url>

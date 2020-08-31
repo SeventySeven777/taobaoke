@@ -28,6 +28,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RestController
 @RequestMapping(BLADE_USER_STORE_URL)
 @AllArgsConstructor
+@CrossOrigin
 public class BladeUserStoreController {
 	private final IBladeUserStoreService iBladeUserStoreService;
 	private final IBladeUserService iBladeUserService;

@@ -33,6 +33,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RestController
 @RequestMapping(BLADE_USER_CHECK_URL)
 @AllArgsConstructor
+@CrossOrigin
 public class BladeUserCheckController {
 	private final IBladeUserService iBladeUserService;
 	private final IBladeUserBashService iBladeUserBashService;

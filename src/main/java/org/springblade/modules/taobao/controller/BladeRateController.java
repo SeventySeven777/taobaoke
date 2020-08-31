@@ -6,11 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.service.IBladeRateService;
 import org.springblade.modules.taobao.service.IBladeUserService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -27,6 +24,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RestController
 @RequestMapping(BLADE_RATE_URL)
 @AllArgsConstructor
+@CrossOrigin
 public class BladeRateController {
 	private final IBladeRateService iBladeRateService;
 	private final IBladeUserService iBladeUserService;

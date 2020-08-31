@@ -7,11 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.entity.BladeWalletHistory;
 import org.springblade.modules.taobao.service.IBladeWalletHistoryService;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -27,6 +24,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.GET_USER_MON
 @RestController
 @RequestMapping(BLADE_WALLET_HISTORY_URL)
 @AllArgsConstructor
+@CrossOrigin
 public class BladeWalletHistoryController {
 	private final IBladeWalletHistoryService iBladeWalletHistoryService;
 

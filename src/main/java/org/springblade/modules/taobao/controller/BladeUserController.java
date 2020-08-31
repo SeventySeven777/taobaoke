@@ -34,6 +34,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RestController
 @RequestMapping(BLADE_USER_URL)
 @AllArgsConstructor
+@CrossOrigin
 public class BladeUserController {
 	private final IBladeUserService iBladeUserService;
 	private final IBladeStoreUserMiddleService iBladeStoreUserMiddleService;

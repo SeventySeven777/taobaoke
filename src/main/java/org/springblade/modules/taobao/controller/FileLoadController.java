@@ -29,6 +29,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.FILE_LOAD_UR
 @RestController
 @RequestMapping(FILE_LOAD_URL)
 @Api(value = "上传文件", tags = "上传文件")
+@CrossOrigin
 public class FileLoadController {
 	/**
 	 * 场景:上传任何文件

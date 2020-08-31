@@ -15,11 +15,8 @@ import org.springblade.modules.taobao.dto.BladeStoreRatePageVO;
 import org.springblade.modules.taobao.entity.BladeOrder;
 import org.springblade.modules.taobao.service.IBladeOrderService;
 import org.springblade.modules.taobao.service.IBladeUserService;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +32,7 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 @RestController
 @RequestMapping(BLADE_ORDER_URL)
 @AllArgsConstructor
+@CrossOrigin
 public class BladeOrderController {
 	private final IBladeOrderService iBladeOrderService;
 	private final IBladeUserService iBladeUserService;
