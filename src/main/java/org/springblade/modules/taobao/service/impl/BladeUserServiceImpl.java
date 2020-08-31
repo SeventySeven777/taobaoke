@@ -67,9 +67,17 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		if (null == bladeUser || !bladeUser.getPassword().equals(loginUserDTO.getPassword())) {
 			return R.fail(NO_USER_OR_PASSWORD_ERROR);
 		}
-		AuthInfo authInfo = TokenUtil.createAuthInfo(bladeUser, bladeUserBashMapper.selectById(bladeUser.getId()).getUserName(),
-			bashNumberInterface.getUserRole(bladeUser.getRole()));
-		myRedisUtil.set(REDIS_TOKEN + authInfo.getAccessToken(), bladeUser.getId(), 30L);
+		String userName;
+		BladeUserBash bladeUserBash = bladeUserBashMapper.selectById(bladeUser.getId());
+		if (bladeUserBash==null){
+			userName = bladeUserStoreMapper.selectById(bladeUser.getId()).getStoreName();
+		}else {
+			userName=bladeUserBash.getUserName();
+		}
+		String userRole = bashNumberInterface.getUserRole(bladeUser.getRole());
+		AuthInfo authInfo = TokenUtil.createAuthInfo(bladeUser, userName,userRole
+			);
+		myRedisUtil.set(REDIS_TOKEN + authInfo.getAccessToken(), bladeUser.getId(), 3000L);
 		return R.data(authInfo);
 
 	}
@@ -273,7 +281,8 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 			.setLatitude(DoDecodeAliPayCode.deCode(initStoreDTO.getLatitude()))
 			.setStoreHuman(DoDecodeAliPayCode.deCode(initStoreDTO.getStoreHuman()))
 			.setAddress(DoDecodeAliPayCode.deCode(initStoreDTO.getAddress()))
-			.setImage(DoDecodeAliPayCode.deCode(initStoreDTO.getImage()));
+			.setImage(DoDecodeAliPayCode.deCode(initStoreDTO.getImage()))
+			.setProvince(DoDecodeAliPayCode.deCode(initStoreDTO.getProvince()));
 	}
 
 	@Override

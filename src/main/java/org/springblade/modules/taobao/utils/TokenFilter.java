@@ -48,6 +48,7 @@ public class TokenFilter implements Filter {
 			rep.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 			rep.setHeader("Access-Control-Max-Age", "3600");
 			rep.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+			rep.setHeader("Allow","GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
 			PrintWriter writer = null;
 			OutputStreamWriter osw = null;
 			osw = new OutputStreamWriter(rep.getOutputStream(),
@@ -65,6 +66,7 @@ public class TokenFilter implements Filter {
 		rep.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 		rep.setHeader("Access-Control-Max-Age", "3600");
 		rep.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+		rep.setHeader("Allow","GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
 		filterChain.doFilter(req, rep);
 	}
 

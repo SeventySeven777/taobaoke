@@ -86,6 +86,9 @@ public class BladeUserStore implements Serializable {
 	@ApiModelProperty(value = "门店唯一码")
 	@TableField(value = "store_code", fill = FieldFill.INSERT_UPDATE)
 	private String storeCode;
+	@ApiModelProperty(value = "门店唯一码")
+	@TableField(value = "province", fill = FieldFill.INSERT_UPDATE)
+	private String province;
 
 
 }

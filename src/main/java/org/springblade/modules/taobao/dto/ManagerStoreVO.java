@@ -20,6 +20,7 @@ import java.util.Date;
 @Accessors(chain = true)
 public class ManagerStoreVO {
 	private String storeName;
-	private Date time;
+	private String time;
 	private BigDecimal rateMoney;
+	private Integer template;
 }
