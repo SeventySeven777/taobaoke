@@ -36,4 +36,9 @@ public interface IBladeWalletService extends IService<BladeWallet> {
 	public R<String> subMoney(BladeWallet userBladeWallet, BigDecimal moneyChange, Integer reason);
 
 
+	/**
+	 * 用来发钱
+	 * @return
+	 */
+	R<String> subMoneyNew();
 }

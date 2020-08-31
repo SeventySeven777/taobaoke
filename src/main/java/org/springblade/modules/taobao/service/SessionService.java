@@ -16,4 +16,10 @@ public interface SessionService {
 	 * @return 返回用户
 	 */
 	R<BladeUser> getUser();
+
+	/**
+	 * 返回是否是admin
+	 * @return 是否是admin
+	 */
+	R<Boolean> getAdmin();
 }

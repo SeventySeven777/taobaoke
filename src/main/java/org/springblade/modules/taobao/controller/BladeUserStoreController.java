@@ -1,9 +1,12 @@
 package org.springblade.modules.taobao.controller;
 
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.taobao.dto.ManagerStoreAll;
 import org.springblade.modules.taobao.dto.UpdateManagerDTO;
 import org.springblade.modules.taobao.entity.BladeUserStore;
 import org.springblade.modules.taobao.service.*;
@@ -14,7 +17,7 @@ import javax.validation.constraints.NotNull;
 
 import java.util.List;
 
-import static org.springblade.modules.taobao.config.BashNumberInterface.STORE_NUMBER;
+import static org.springblade.modules.taobao.config.BashNumberInterface.*;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
 /**
@@ -29,6 +32,7 @@ public class BladeUserStoreController {
 	private final IBladeUserStoreService iBladeUserStoreService;
 	private final IBladeUserService iBladeUserService;
 	private final IBladeUserBashService iBladeUserBashService;
+	private final SessionService sessionService;
 
 	/**
 	 * 查看店铺信息
@@ -86,6 +90,26 @@ public class BladeUserStoreController {
 	public R<String> deleteStore(@RequestParam("store-id") @NotNull String storeId) {
 		return iBladeUserStoreService.deleteStore(storeId);
 	}
+
+	@RequestMapping(value = GET_MANAGER_STORE,method = RequestMethod.GET)
+	@ApiOperation(value = "经理查询门店列表",notes = "查看店铺信息")
+	public R<ManagerStoreAll> getManagerStore(@RequestParam("size") Integer size,
+											  @RequestParam("current") Integer current,
+											  @RequestParam(value = "date",required = false,defaultValue = "") String date,
+											  @RequestParam(value = "status",required = false,defaultValue = "") String status){
+		String id = sessionService.getUser().getData().getId();
+		if (StrUtil.isEmpty(status)){
+			//空状态
+			return iBladeUserStoreService.getManagerPage(id,size,current,date);
+		}
+		if (status.equals(NUMBER_ONE)){
+			//有提成
+			return iBladeUserStoreService.getManagerPage(id,size,current,date,NUMBER_ONE);
+		}
+		//无提成
+		return iBladeUserStoreService.getManagerPage(id,size,current,date,NUMBER_ZERO);
+	}
+
 
 
 }

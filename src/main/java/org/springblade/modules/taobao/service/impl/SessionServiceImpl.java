@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.springblade.modules.taobao.config.BashNumberInterface.REDIS_TOKEN;
-import static org.springblade.modules.taobao.config.BashNumberInterface.REDIS_USER;
+import static org.springblade.modules.taobao.config.BashNumberInterface.*;
 
 /**
  * 获取用户基础数据
@@ -27,8 +26,15 @@ public class SessionServiceImpl implements SessionService {
 	@Override
 	public R<BladeUser> getUser() {
 		String token = httpServletRequest.getHeader("token");
-		String userId = myRedisUtil.get(REDIS_TOKEN+token);
+		String userId = myRedisUtil.get(REDIS_TOKEN + token);
 		BladeUser bladeUser = myRedisUtil.get(REDIS_USER + userId);
 		return R.data(bladeUser);
+	}
+
+	@Override
+	public R<Boolean> getAdmin() {
+		String token = httpServletRequest.getHeader("token");
+		String userId = myRedisUtil.get(REDIS_TOKEN + token);
+		return R.status(ADMIN_ID.equals(userId));
 	}
 }

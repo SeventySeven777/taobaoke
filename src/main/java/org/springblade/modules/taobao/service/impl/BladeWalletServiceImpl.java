@@ -54,4 +54,9 @@ public class BladeWalletServiceImpl extends ServiceImpl<BladeWalletMapper, Blade
 		return iBladeWalletHistoryService.subMoneyHistory(userBladeWallet.getId(), moneyChange, reason, userBladeWallet.getMoney());
 	}
 
+	@Override
+	public R<String> subMoneyNew() {
+		return null;
+	}
+
 }

@@ -20,6 +20,7 @@ public interface BashNumberInterface {
 	String ERROR_DATA = "数据错误,请清除数据库垃圾数据";
 	String INIT_QR_CODE = "请初始化二维码";
 	String NUMBER_ONE = "1";
+	String NUMBER_ZERO = "0";
 	String NO_MANAGER = "暂无区域经理";
 	String ADMIN_ID = "admin";
 	String ORDER_OK = "已过期订单";

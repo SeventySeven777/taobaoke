@@ -26,6 +26,7 @@ public interface MethodConfig {
 	String STORE_INIT_OK = "店铺创建成功";
 	String NO_QUERY_USER = "未查询到该用户,检查ID";
 	String PASSWORD_ERROR = "密码错误";
+	String JUST_ADMIN_CAN_SUB = "只有admin可以访问";
 	String SAVE_OK = "保存成功";
 	String DELETE_OK = "删除成功";
 	String MONEY_ERROR = "余额不足";

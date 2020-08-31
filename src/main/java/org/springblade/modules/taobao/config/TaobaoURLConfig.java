@@ -45,6 +45,7 @@ public interface TaobaoURLConfig {
 	String GET_STORE_PAGE = "/get-store-page-info";
 	String PUT_STORE_MANAGER = "/update-store-manager";
 	String DELETE_STORE_MANAGER = "/delete-store";
+	String GET_MANAGER_STORE = "/get-store-page-by-manager";
 
 	/**
 	 * 审核状态controller
@@ -72,6 +73,7 @@ public interface TaobaoURLConfig {
 	 */
 	String GET_USER_MONEY = "/get-user-wallet";
 	String SUB_USER_MONEY = "/sub-user-wallet";
+	String SUB_USER_MONEY_NEW = "/sub-users-wallet";
 	String ADD_ADMIN_MONEY = "/add_admin_money";
 	String ADMIN_INIT_WALLET = "/";
 	String GET_USER_MONEY_HISTORY = "/get-user-wallet-history";

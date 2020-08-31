@@ -11,6 +11,7 @@ import org.springblade.modules.taobao.entity.BladeWallet;
 import org.springblade.modules.taobao.service.IBladeAdminAccountService;
 import org.springblade.modules.taobao.service.IBladeUserService;
 import org.springblade.modules.taobao.service.IBladeWalletService;
+import org.springblade.modules.taobao.service.SessionService;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import springfox.documentation.annotations.ApiIgnore;
@@ -21,8 +22,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 import static org.springblade.modules.taobao.config.BashNumberInterface.*;
-import static org.springblade.modules.taobao.config.MethodConfig.INIT_OK;
-import static org.springblade.modules.taobao.config.MethodConfig.PASSWORD_ERROR;
+import static org.springblade.modules.taobao.config.MethodConfig.*;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
 /**
@@ -37,6 +37,7 @@ public class BladeWalletController {
 	private final IBladeWalletService iBladeWalletService;
 	private final IBladeUserService iBladeUserService;
 	private final IBladeAdminAccountService iBladeAdminAccountService;
+	private final SessionService sessionService;
 
 	/**
 	 * 获取用户钱包数据
@@ -66,6 +67,21 @@ public class BladeWalletController {
 		return iBladeWalletService.subMoney(iBladeWalletService.getById(subMoneyDTO.getUserId())
 			, subMoneyDTO.getMoneyChange().multiply(new BigDecimal(-1)), WITHDRAW);
 	}
+
+	/**
+	 * 提现新
+	 *
+	 * @return 是否成功
+	 */
+	@RequestMapping(value = SUB_USER_MONEY_NEW, method = RequestMethod.GET)
+	@ApiOperation(value = "提现新,请求一下开始发钱返回是否成功", notes = "用户钱包接口管理")
+	public R<String> subMoneyNew() {
+		if (!sessionService.getAdmin().getData()) {
+			return R.fail(JUST_ADMIN_CAN_SUB);
+		}
+		return iBladeWalletService.subMoneyNew();
+	}
+
 
 	/**
 	 * 管理员加钱,目前为直接钱包加钱 之后情况再改
