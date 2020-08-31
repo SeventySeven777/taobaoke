@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
+import static org.springblade.modules.taobao.config.BashNumberInterface.REDIS_TOKEN;
 import static org.springblade.modules.taobao.config.MethodConfig.LOGIN_PLEASE;
 import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 
@@ -28,6 +29,8 @@ import static org.springblade.modules.taobao.config.TaobaoURLConfig.*;
 public class TokenFilter implements Filter {
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
+	@Autowired
+	private MyRedisUtil myRedisUtil;
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -38,7 +41,7 @@ public class TokenFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
 		HttpServletResponse rep = (HttpServletResponse) servletResponse;
 		String token = req.getHeader("token");
-		String userId = new SaveToken(redisTemplate).getToken(token);
+		String userId = myRedisUtil.get(REDIS_TOKEN+token);
 		if (null == userId || StrUtil.isEmpty(userId)) {
 			rep.setStatus(401);
 			PrintWriter writer = null;

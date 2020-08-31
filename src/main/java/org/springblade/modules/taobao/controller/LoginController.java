@@ -15,11 +15,7 @@ import org.springblade.modules.taobao.entity.BladeUserStore;
 import org.springblade.modules.taobao.service.*;
 import org.springblade.modules.taobao.utils.CheckObjAllFieldsIsNullUtils;
 import org.springblade.modules.taobao.utils.MyRedisUtil;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 
@@ -107,9 +103,15 @@ public class LoginController {
 	 */
 	@RequestMapping(value = TO_CHECK_AGAIN, method = RequestMethod.POST)
 	@ApiOperation(value = "再次发起审核", notes = "登录")
-	public R<AuthInfo> toCheckAgain(@RequestBody InitUserDTO initUserDTO) {
+	public R<AuthInfo> toCheckAgain(@RequestBody InitUserDTO initUserDTO, @RequestParam("id")String id) {
+		BladeUser bladeUser = myRedisUtil.get(REDIS_USER+id);
+		if (!bladeUser.getPhone().equals(initUserDTO.getPhone())){
+			return R.fail("手机号不准改!!!");
+		}
 		BladeUserBash bladeUserBash = iBladeUserService.deCode(initUserDTO);
-		R<BladeUser> user = sessionService.getUser();
+		//R<BladeUser> user = sessionService.getUser();
+		//todo:暂时这个地方定没有token 故注释掉
+		R<BladeUser> user = R.data(bladeUser);
 		if (!user.isSuccess()) {
 			return R.fail(LOGIN_PLEASE);
 		}

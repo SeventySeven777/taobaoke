@@ -1,13 +1,11 @@
 package org.springblade.modules.taobao.utils;
 
 import lombok.AllArgsConstructor;
-import org.springblade.modules.taobao.entity.BladeUserBash;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -67,7 +65,7 @@ public class MyRedisUtil {
 	 */
 	public void del(String... key) {
 		if (key != null && key.length > 0) {
-			Collection<String> list = castObject(key);
+			Collection<String> list = Arrays.asList(key);
 			redisTemplate.delete(list);
 		}
 	}

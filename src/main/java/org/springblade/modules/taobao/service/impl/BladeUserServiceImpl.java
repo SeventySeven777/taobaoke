@@ -102,6 +102,7 @@ public class BladeUserServiceImpl extends ServiceImpl<BladeUserMapper, BladeUser
 		initUser(bladeUser, MANAGER_NUMBER, STATUS_NO_CHECK_NUMBER);
 		//initUserBash
 		bladeUserBash.setId(userId);
+		myRedisUtil.set(REDIS_USER+userId,bladeUser);
 		if (bladeUserBashMapper.insert(bladeUserBash) != 1) {
 			throw new SqlException(SAVE_ERROR);
 		}

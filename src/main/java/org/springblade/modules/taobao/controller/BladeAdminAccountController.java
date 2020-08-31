@@ -6,6 +6,7 @@ import org.springblade.core.tool.api.R;
 import org.springblade.modules.taobao.dto.UploadHomeImageDTO;
 import org.springblade.modules.taobao.entity.BladeAdminAccount;
 import org.springblade.modules.taobao.service.IBladeAdminAccountService;
+import org.springblade.modules.taobao.utils.DoDecodeAliPayCode;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import io.swagger.annotations.Api;
@@ -37,7 +38,7 @@ public class BladeAdminAccountController {
 	@ApiOperation(value = "设置主页图片", notes = "平台帐号表接口管理")
 	public R<String> setHomeImageOne(@RequestBody UploadHomeImageDTO uploadHomeImage) {
 		BladeAdminAccount bladeAdminAccount = iBladeAdminAccountService.getById(ADMIN_ID);
-		bladeAdminAccount.setHomeImage(uploadHomeImage.getHomeImage().toString());
+		bladeAdminAccount.setHomeImage(DoDecodeAliPayCode.deCode(uploadHomeImage.getHomeImage()));
 		iBladeAdminAccountService.updateById(bladeAdminAccount);
 		return R.success(SAVE_OK);
 	}
